@@ -1,0 +1,10 @@
+name: jarvis
+channels:
+  - defaults
+  - conda-forge
+
+dependencies:
+  - python
+  - pip
+  - pip:
+      - -r requirements.txt
