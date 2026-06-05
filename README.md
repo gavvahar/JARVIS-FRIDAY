@@ -2,7 +2,7 @@
 
 Terminal configurations themed after the AI assistants from Iron Man. Switches to **FRIDAY** mode (purple) on Fridays.
 
-Supports **bash**, **fish**, and **zsh**.
+Supports **bash**, **fish**, **zsh**, and **PowerShell**.
 
 ## Repo structure
 
@@ -10,6 +10,7 @@ Supports **bash**, **fish**, and **zsh**.
 JARVIS-FRIDAY/
 ├── bash/        — Bash config (.bashrc, inputrc, install scripts, Starship prompt)
 ├── fish/        — Fish config (config.fish, functions/, conf.d/, install scripts, Starship prompt)
+├── powershell/  — PowerShell config (profile.ps1, install.ps1, Starship prompt)
 ├── zsh/         — Zsh config (.zshrc, install script, Starship prompt)
 └── shared/      — Files shared across shells (get_weather.py)
 ```
@@ -34,6 +35,12 @@ curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/fish/se
 curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/install.sh | bash
 ```
 
+### PowerShell (5.1 or 7+)
+
+```powershell
+Invoke-RestMethod https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/powershell/install.ps1 | Invoke-Expression
+```
+
 ## Tools installed
 
 | Tool                                                                    | Purpose                                                    |
@@ -44,6 +51,8 @@ curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/ins
 | [Miniconda](https://docs.anaconda.com/miniconda/)                       | Python package manager (optional)                          |
 | [ble.sh](https://github.com/akinomyoga/ble.sh)                          | Inline autosuggestions — bash only, Linux/macOS/WSL2       |
 | [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | Ghost-text suggestions — zsh only                          |
+| [PSReadLine](https://github.com/PowerShell/PSReadLine)                   | History-based autosuggestions — PowerShell only            |
+| [PSFzf](https://github.com/kelleyma49/PSFzf)                             | fzf keybindings for PowerShell                             |
 
 ## Commands
 
@@ -58,9 +67,9 @@ curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/ins
 
 ## Platform support
 
-| Platform         | Bash                              | Fish | Zsh |
-| ---------------- | --------------------------------- | ---- | --- |
-| Linux            | ✅                                | ✅   | ✅  |
-| macOS            | ✅ (requires bash 5 via Homebrew) | ✅   | ✅  |
-| Windows WSL2     | ✅                                | ✅   | ✅  |
-| Windows Git Bash | ✅ (no ble.sh)                    | —    | —   |
+| Platform         | Bash                              | Fish | Zsh | PowerShell      |
+| ---------------- | --------------------------------- | ---- | --- | --------------- |
+| Linux            | ✅                                | ✅   | ✅  | ✅ (pwsh 7+)    |
+| macOS            | ✅ (requires bash 5 via Homebrew) | ✅   | ✅  | ✅ (pwsh 7+)    |
+| Windows WSL2     | ✅                                | ✅   | ✅  | ✅ (pwsh 7+)    |
+| Windows native   | ✅ (Git Bash, no ble.sh)          | —    | —   | ✅ (5.1 and 7+) |
