@@ -37,6 +37,14 @@ curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/ins
 
 ### PowerShell (5.1 or 7+)
 
+Linux / macOS / WSL:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/powershell/install.ps1 | pwsh
+```
+
+Windows (native PowerShell):
+
 ```powershell
 Invoke-RestMethod https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/powershell/install.ps1 | Invoke-Expression
 ```
