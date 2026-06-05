@@ -59,8 +59,8 @@ Invoke-RestMethod https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/
 | [Miniconda](https://docs.anaconda.com/miniconda/)                       | Python package manager (optional)                          |
 | [ble.sh](https://github.com/akinomyoga/ble.sh)                          | Inline autosuggestions — bash only, Linux/macOS/WSL2       |
 | [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | Ghost-text suggestions — zsh only                          |
-| [PSReadLine](https://github.com/PowerShell/PSReadLine)                   | History-based autosuggestions — PowerShell only            |
-| [PSFzf](https://github.com/kelleyma49/PSFzf)                             | fzf keybindings for PowerShell                             |
+| [PSReadLine](https://github.com/PowerShell/PSReadLine)                  | History-based autosuggestions — PowerShell only            |
+| [PSFzf](https://github.com/kelleyma49/PSFzf)                            | fzf keybindings for PowerShell                             |
 
 ## Commands
 
@@ -75,9 +75,9 @@ Invoke-RestMethod https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/
 
 ## Platform support
 
-| Platform         | Bash                              | Fish | Zsh | PowerShell      |
-| ---------------- | --------------------------------- | ---- | --- | --------------- |
-| Linux            | ✅                                | ✅   | ✅  | ✅ (pwsh 7+)    |
-| macOS            | ✅ (requires bash 5 via Homebrew) | ✅   | ✅  | ✅ (pwsh 7+)    |
-| Windows WSL2     | ✅                                | ✅   | ✅  | ✅ (pwsh 7+)    |
-| Windows native   | ✅ (Git Bash, no ble.sh)          | —    | —   | ✅ (5.1 and 7+) |
+| Platform       | Bash                              | Fish | Zsh | PowerShell      |
+| -------------- | --------------------------------- | ---- | --- | --------------- |
+| Linux          | ✅                                | ✅   | ✅  | ✅ (pwsh 7+)    |
+| macOS          | ✅ (requires bash 5 via Homebrew) | ✅   | ✅  | ✅ (pwsh 7+)    |
+| Windows WSL2   | ✅                                | ✅   | ✅  | ✅ (pwsh 7+)    |
+| Windows native | ✅ (Git Bash, no ble.sh)          | —    | —   | ✅ (5.1 and 7+) |
