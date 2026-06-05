@@ -2,7 +2,7 @@
 
 set -e
 
-BASE="https://raw.githubusercontent.com/gavvahar/fish-terminal/main"
+BASE="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/fish"
 
 echo "── Step 1: Install Fish shell ───────────────────────────────────────────────"
 curl -fsSL "$BASE/install-fish.sh" | bash

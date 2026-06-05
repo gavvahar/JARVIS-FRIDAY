@@ -6,7 +6,7 @@ log()  { printf "${CYAN}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
 warn() { printf "${YELLOW}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
 err()  { printf "${RED}[J.A.R.V.I.S.]${RESET} %s\n" "$*" >&2; exit 1; }
 
-RAW="https://raw.githubusercontent.com/gavvahar/zsh-terminal/main"
+RAW="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh"
 
 # ── OS detection ──────────────────────────────────────────────────────────────
 os() {

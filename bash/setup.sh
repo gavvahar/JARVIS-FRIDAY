@@ -2,7 +2,7 @@
 
 set -e
 
-BASE="https://raw.githubusercontent.com/gavvahar/bash-terminal/main"
+BASE="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/bash"
 
 echo "════════════════════════════════════════"
 echo "  Bash Terminal Setup"
