@@ -43,15 +43,29 @@ if ($_IsFriday) {
 }
 $_Reset = "$_ESC[0m"
 
+# Define box-drawing characters via code points so the source file contains no
+# multi-byte UTF-8 sequences that PS 5.1 misreads as string delimiters under
+# Windows-1252 (e.g. 0x94 = curly double-quote, which closes double-quoted strings).
+$_C_HR = [char]0x2550  # =
+$_C_VR = [char]0x2551  # |
+$_C_TL = [char]0x2554  # top-left corner
+$_C_TR = [char]0x2557  # top-right corner
+$_C_BL = [char]0x255A  # bottom-left corner
+$_C_BR = [char]0x255D  # bottom-right corner
+$_C_LM = [char]0x2560  # left mid-separator
+$_C_RM = [char]0x2563  # right mid-separator
+$_C_DI = [char]0x25C8  # diamond bullet
+$_C_EM = [char]0x2014  # em dash
+
 # ── Box helpers ───────────────────────────────────────────────────────────────
 function _jv_row([string]$text, [int]$width) {
     $content = "  $text"
     if ($content.Length -gt $width) { $content = $content.Substring(0, $width) }
-    "$_Color  ║$($content.PadRight($width))║$_Reset"
+    "$_Color  ${_C_VR}$($content.PadRight($width))${_C_VR}$_Reset"
 }
 
 function _jv_sep([int]$width) {
-    "$_Bold  ╠$('═' * $width)╣$_Reset"
+    "$_Bold  ${_C_LM}$("$_C_HR" * $width)${_C_RM}$_Reset"
 }
 
 # ── System info ───────────────────────────────────────────────────────────────
@@ -142,28 +156,28 @@ function _jv_sysinfo {
 function _jv_greeting {
     $hour    = (Get-Date).Hour
     $period  = if ($hour -lt 12) { 'morning' } elseif ($hour -lt 17) { 'afternoon' } else { 'evening' }
-    $dt      = (Get-Date).ToString('dddd, MMMM dd yyyy — hh:mm tt')
+    $dt      = (Get-Date).ToString('dddd, MMMM dd yyyy ') + $_C_EM + (Get-Date).ToString(' hh:mm tt')
     $user    = if ($env:USER) { $env:USER } else { $env:USERNAME }
     $status  = $_StatusMessages | Get-Random
     $sys     = _jv_sysinfo
     $width   = 60
-    $sep     = '═' * $width
-    $hdr     = "══[ $_AIName ]"
-    $hdrFill = '═' * ($width - $hdr.Length)
+    $sep     = "$_C_HR" * $width
+    $hdr     = "${_C_HR}${_C_HR}[ $_AIName ]"
+    $hdrFill = "$_C_HR" * ($width - $hdr.Length)
 
     Write-Host ""
-    Write-Host "  $_Bold╔$hdr$hdrFill╗$_Reset"
+    Write-Host "  ${_Bold}${_C_TL}${hdr}${hdrFill}${_C_TR}${_Reset}"
     Write-Host (_jv_row $_AIFull $width)
-    Write-Host "  $_Bold╠$sep╣$_Reset"
+    Write-Host "  ${_Bold}${_C_LM}${sep}${_C_RM}${_Reset}"
     Write-Host (_jv_row "Good $period, $user." $width)
     Write-Host (_jv_row $dt $width)
     if ($sys.Uptime)  { Write-Host (_jv_row "Uptime: $($sys.Uptime)" $width) }
     if ($sys.Memory -and $sys.CpuLoad) {
         Write-Host (_jv_row "Memory: $($sys.Memory)   CPU: $($sys.CpuLoad)" $width)
     }
-    Write-Host "  $_Bold╠$sep╣$_Reset"
-    Write-Host (_jv_row "◈ $status" $width)
-    Write-Host "  $_Bold╚$sep╝$_Reset"
+    Write-Host "  ${_Bold}${_C_LM}${sep}${_C_RM}${_Reset}"
+    Write-Host (_jv_row "${_C_DI} $status" $width)
+    Write-Host "  ${_Bold}${_C_BL}${sep}${_C_BR}${_Reset}"
     Write-Host ""
 }
 
@@ -171,12 +185,12 @@ function _jv_greeting {
 function jarvis {
     $sys     = _jv_sysinfo
     $width   = 54
-    $sep     = '═' * $width
-    $hdr     = "══[ $_AIName DIAGNOSTICS ]"
-    $hdrFill = '═' * ($width - $hdr.Length)
+    $sep     = "$_C_HR" * $width
+    $hdr     = "${_C_HR}${_C_HR}[ $_AIName DIAGNOSTICS ]"
+    $hdrFill = "$_C_HR" * ($width - $hdr.Length)
 
     Write-Host ""
-    Write-Host "  $_Bold╔$hdr$hdrFill╗$_Reset"
+    Write-Host "  ${_Bold}${_C_TL}${hdr}${hdrFill}${_C_TR}${_Reset}"
     if ($sys.Uptime)    { Write-Host (_jv_row "Uptime:   $($sys.Uptime)"   $width) }
     if ($sys.Memory)    { Write-Host (_jv_row "Memory:   $($sys.Memory)"   $width) }
     if ($sys.CpuLoad)   { Write-Host (_jv_row "CPU Load: $($sys.CpuLoad)"  $width) }
@@ -185,7 +199,7 @@ function jarvis {
     if ($env:CONDA_DEFAULT_ENV -and $env:CONDA_DEFAULT_ENV -ne 'base') {
         Write-Host (_jv_row "Conda:    $env:CONDA_DEFAULT_ENV" $width)
     }
-    Write-Host "  $_Bold╚$sep╝$_Reset"
+    Write-Host "  ${_Bold}${_C_BL}${sep}${_C_BR}${_Reset}"
     Write-Host ""
 }
 
@@ -204,13 +218,13 @@ function _jv_load_locations {
 function brief {
     $hour   = (Get-Date).Hour
     $period = if ($hour -lt 12) { 'morning' } elseif ($hour -lt 17) { 'afternoon' } else { 'evening' }
-    $dt     = (Get-Date).ToString('dddd, MMMM dd yyyy — hh:mm tt')
+    $dt     = (Get-Date).ToString('dddd, MMMM dd yyyy ') + $_C_EM + (Get-Date).ToString(' hh:mm tt')
     $sys    = _jv_sysinfo
     $locs   = _jv_load_locations
     $width  = 60
-    $sep    = '═' * $width
-    $hdr     = "══[ $_AIName BRIEF ]"
-    $hdrFill = '═' * ($width - $hdr.Length)
+    $sep    = "$_C_HR" * $width
+    $hdr     = "${_C_HR}${_C_HR}[ $_AIName BRIEF ]"
+    $hdrFill = "$_C_HR" * ($width - $hdr.Length)
 
     $weatherLines = @()
     if ((Test-Path $script:_WeatherScript) -and (Get-Command python3 -ErrorAction SilentlyContinue)) {
@@ -226,7 +240,7 @@ function brief {
     }
 
     Write-Host ""
-    Write-Host "  $_Bold╔$hdr$hdrFill╗$_Reset"
+    Write-Host "  ${_Bold}${_C_TL}${hdr}${hdrFill}${_C_TR}${_Reset}"
     Write-Host (_jv_row "Good $period. Here is your briefing." $width)
     Write-Host (_jv_row $dt $width)
     if ($weatherLines.Count -gt 0) {
@@ -242,13 +256,13 @@ function brief {
             }
         }
     }
-    Write-Host "  $_Bold╠$sep╣$_Reset"
+    Write-Host "  ${_Bold}${_C_LM}${sep}${_C_RM}${_Reset}"
     if ($sys.Uptime)  { Write-Host (_jv_row "Uptime:   $($sys.Uptime)"  $width) }
     if ($sys.Memory)  { Write-Host (_jv_row "Memory:   $($sys.Memory)"  $width) }
     if ($sys.CpuLoad) { Write-Host (_jv_row "CPU:      $($sys.CpuLoad)" $width) }
     if ($sys.Disk)    { Write-Host (_jv_row "Disk:     $($sys.Disk)"    $width) }
     if ($sys.Network) { Write-Host (_jv_row "Network:  $($sys.Network)" $width) }
-    Write-Host "  $_Bold╚$sep╝$_Reset"
+    Write-Host "  ${_Bold}${_C_BL}${sep}${_C_BR}${_Reset}"
     Write-Host ""
 }
 
@@ -263,7 +277,7 @@ function jarvis-locate {
     if ($Sub -eq '' -or $Sub -eq 'list') {
         $locs = _jv_load_locations
         if ($locs.Count -eq 0) {
-            Write-Host "  $_Color◈$_Reset No locations set — using IP detection."
+            Write-Host "  ${_Color}${_C_DI}${_Reset} No locations set ${_C_EM} using IP detection."
         } else {
             Write-Host "  ${_Bold}Monitored locations:$_Reset"
             for ($i = 0; $i -lt $locs.Count; $i++) {
@@ -275,21 +289,21 @@ function jarvis-locate {
         $locs = [System.Collections.Generic.List[string]](_jv_load_locations)
         $locs.Add($loc)
         $locs | ConvertTo-Json | Set-Content $script:_LocationsFile
-        Write-Host "  $_Color◈$_Reset Added: $loc"
+        Write-Host "  ${_Color}${_C_DI}${_Reset} Added: $loc"
     } elseif ($Sub -eq 'remove') {
         if (-not $loc) { Write-Host 'Usage: jarvis-locate remove "City, State"'; return }
         $locs = [System.Collections.Generic.List[string]](_jv_load_locations | Where-Object { $_ -ne $loc })
         $locs | ConvertTo-Json | Set-Content $script:_LocationsFile
-        Write-Host "  $_Color◈$_Reset Removed: $loc"
+        Write-Host "  ${_Color}${_C_DI}${_Reset} Removed: $loc"
     } elseif ($Sub -eq 'clear') {
         '[]' | Set-Content $script:_LocationsFile
-        Write-Host "  $_Color◈$_Reset All locations cleared. Falling back to IP detection."
+        Write-Host "  ${_Color}${_C_DI}${_Reset} All locations cleared. Falling back to IP detection."
     } else {
         Write-Host 'Usage:'
-        Write-Host '  jarvis-locate                       — show monitored locations'
-        Write-Host '  jarvis-locate add "City, State"    — add a location'
-        Write-Host '  jarvis-locate remove "City, State" — remove a location'
-        Write-Host '  jarvis-locate clear                 — clear all locations'
+        Write-Host "  jarvis-locate                       ${_C_EM} show monitored locations"
+        Write-Host "  jarvis-locate add `"City, State`"    ${_C_EM} add a location"
+        Write-Host "  jarvis-locate remove `"City, State`" ${_C_EM} remove a location"
+        Write-Host "  jarvis-locate clear                 ${_C_EM} clear all locations"
     }
 }
 
