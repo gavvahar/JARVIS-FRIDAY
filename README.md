@@ -36,31 +36,31 @@ curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/ins
 
 ## Tools installed
 
-| Tool | Purpose |
-| --- | --- |
-| [Starship](https://starship.rs) | Cross-shell prompt with JARVIS/FRIDAY separator |
-| [Zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter `cd` via `z` |
-| [fzf](https://github.com/junegunn/fzf) | Fuzzy history search (`Ctrl+R`) and file picker (`Ctrl+T`) |
-| [Miniconda](https://docs.anaconda.com/miniconda/) | Python package manager (optional) |
-| [ble.sh](https://github.com/akinomyoga/ble.sh) | Inline autosuggestions — bash only, Linux/macOS/WSL2 |
-| [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | Ghost-text suggestions — zsh only |
+| Tool                                                                    | Purpose                                                    |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------- |
+| [Starship](https://starship.rs)                                         | Cross-shell prompt with JARVIS/FRIDAY separator            |
+| [Zoxide](https://github.com/ajeetdsouza/zoxide)                         | Smarter `cd` via `z`                                       |
+| [fzf](https://github.com/junegunn/fzf)                                  | Fuzzy history search (`Ctrl+R`) and file picker (`Ctrl+T`) |
+| [Miniconda](https://docs.anaconda.com/miniconda/)                       | Python package manager (optional)                          |
+| [ble.sh](https://github.com/akinomyoga/ble.sh)                          | Inline autosuggestions — bash only, Linux/macOS/WSL2       |
+| [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | Ghost-text suggestions — zsh only                          |
 
 ## Commands
 
-| Command | Description |
-| --- | --- |
-| `jarvis` | System diagnostics panel (memory, CPU, disk, network) |
-| `brief` | Morning briefing with weather |
-| `jarvis-locate add "City, State"` | Add a weather location |
-| `jarvis-locate remove "City, State"` | Remove a location |
-| `jarvis-locate` | List saved locations |
-| `jarvis-locate clear` | Clear all locations, fall back to IP detection |
+| Command                              | Description                                           |
+| ------------------------------------ | ----------------------------------------------------- |
+| `jarvis`                             | System diagnostics panel (memory, CPU, disk, network) |
+| `brief`                              | Morning briefing with weather                         |
+| `jarvis-locate add "City, State"`    | Add a weather location                                |
+| `jarvis-locate remove "City, State"` | Remove a location                                     |
+| `jarvis-locate`                      | List saved locations                                  |
+| `jarvis-locate clear`                | Clear all locations, fall back to IP detection        |
 
 ## Platform support
 
-| Platform | Bash | Fish | Zsh |
-| --- | --- | --- | --- |
-| Linux | ✅ | ✅ | ✅ |
-| macOS | ✅ (requires bash 5 via Homebrew) | ✅ | ✅ |
-| Windows WSL2 | ✅ | ✅ | ✅ |
-| Windows Git Bash | ✅ (no ble.sh) | — | — |
+| Platform         | Bash                              | Fish | Zsh |
+| ---------------- | --------------------------------- | ---- | --- |
+| Linux            | ✅                                | ✅   | ✅  |
+| macOS            | ✅ (requires bash 5 via Homebrew) | ✅   | ✅  |
+| Windows WSL2     | ✅                                | ✅   | ✅  |
+| Windows Git Bash | ✅ (no ble.sh)                    | —    | —   |
