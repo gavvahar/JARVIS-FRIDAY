@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor
+.vscode/
+*.swp
+*.swo
+
+# Backups created by install scripts
+*.bak.*
+
+# Shell local overrides
+.bashrc.local
+fish_variables
+
+# Tools
+node_modules/
+.lh/
+.claude
+
+# zsh
+.zcompdump
+.zcompdump-*

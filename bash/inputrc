@@ -1,0 +1,14 @@
+# Case-insensitive tab completion
+set completion-ignore-case on
+set completion-map-case on
+
+# Complete on first Tab even with multiple matches
+set show-all-if-ambiguous on
+
+# Color matching prefix and file types in completions
+set colored-completion-prefix on
+set colored-stats on
+
+# Tab / Shift+Tab cycle through completions
+TAB: menu-complete
+"\e[Z": menu-complete-backward

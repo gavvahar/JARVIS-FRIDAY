@@ -1,0 +1,15 @@
+line-length = 180
+
+exclude = [
+    "__pycache__",
+    "manage.py",
+    "venv",
+    ".tox",
+    ".venv",
+    "tests.py",
+    "env",
+]
+
+[lint]
+select = ["E", "F", "B"]
+ignore = ["E203", "E501", "E701", "E401", "B008"]
