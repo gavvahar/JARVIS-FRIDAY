@@ -1,2 +1,4 @@
+black
 nodeenv
+ruff
 tox
