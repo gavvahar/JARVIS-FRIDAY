@@ -25,9 +25,9 @@ $REPO_DIR   = "$HOME/.config/JARVIS-FRIDAY"
 $INSTALL_DIR = "$REPO_DIR/powershell"
 
 Write-Host ""
-Write-Host "  ${CYAN}╔══[ J.A.R.V.I.S. POWERSHELL SETUP ]══╗${RESET}"
-Write-Host "  ${CYAN}║  Cross-platform PowerShell config     ║${RESET}"
-Write-Host "  ${CYAN}╚══════════════════════════════════════╝${RESET}"
+Write-Host "  ${CYAN}╔══[ J.A.R.V.I.S. POWERSHELL SETUP ]══════╗${RESET}"
+Write-Host "  ${CYAN}║  Cross-platform PowerShell config       ║${RESET}"
+Write-Host "  ${CYAN}╚═════════════════════════════════════════╝${RESET}"
 Write-Host ""
 
 # ── Suggest PowerShell 7 if on 5.1 ───────────────────────────────────────────
@@ -182,7 +182,7 @@ if (prompt-yn "Install Miniconda?") {
 }
 
 Write-Host ""
-Write-Host "  ${CYAN}╔══[ INSTALLATION COMPLETE ]══════════════╗${RESET}"
-Write-Host "  ${CYAN}║  Restart PowerShell to activate JARVIS  ║${RESET}"
+Write-Host "  ${CYAN}╔══[ INSTALLATION COMPLETE ]═══════════════╗${RESET}"
+Write-Host "  ${CYAN}║  Restart PowerShell to activate JARVIS   ║${RESET}"
 Write-Host "  ${CYAN}╚══════════════════════════════════════════╝${RESET}"
 Write-Host ""
