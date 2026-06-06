@@ -2,7 +2,7 @@
 
 set -e
 
-BASE="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/bash"
+BASE="https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/bash"
 
 echo "════════════════════════════════════════"
 echo "  Bash Terminal Setup"

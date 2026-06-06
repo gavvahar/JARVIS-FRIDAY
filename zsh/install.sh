@@ -6,7 +6,7 @@ log()  { printf "${CYAN}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
 warn() { printf "${YELLOW}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
 err()  { printf "${RED}[J.A.R.V.I.S.]${RESET} %s\n" "$*" >&2; exit 1; }
 
-RAW="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh"
+RAW="https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/zsh"
 
 # ── OS detection ──────────────────────────────────────────────────────────────
 os() {
@@ -92,8 +92,8 @@ fi
 log "Downloading JARVIS config..."
 mkdir -p ~/zsh
 curl -fsSL "$RAW/.zshrc"               -o ~/zsh/.zshrc
-curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/starship.toml"        -o ~/zsh/starship.toml
-curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/starship-friday.toml" -o ~/zsh/starship-friday.toml
+curl -fsSL "https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/shared/starship.toml"        -o ~/zsh/starship.toml
+curl -fsSL "https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/shared/starship-friday.toml" -o ~/zsh/starship-friday.toml
 
 # ── ~/.zshrc ──────────────────────────────────────────────────────────────────
 ZSHRC_LINE='source ~/zsh/.zshrc'

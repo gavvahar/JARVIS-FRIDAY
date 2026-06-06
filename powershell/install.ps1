@@ -20,7 +20,7 @@ $_IsWindows = if ($_PSMajor -ge 6) { $IsWindows } else { $env:OS -eq 'Windows_NT
 $_IsLinux   = if ($_PSMajor -ge 6) { $IsLinux }   else { $false }
 $_IsMacOS   = if ($_PSMajor -ge 6) { $IsMacOS }   else { $false }
 
-$REPO_URL   = 'https://github.com/gavvahar/JARVIS-FRIDAY.git'
+$REPO_URL   = 'https://gitlab.com/self-host-server/JARVIS-FRIDAY.git'
 $REPO_DIR   = "$HOME/.config/JARVIS-FRIDAY"
 $INSTALL_DIR = "$REPO_DIR/powershell"
 

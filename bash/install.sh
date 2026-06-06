@@ -10,7 +10,7 @@ if [[ -d "$REPO_DIR" ]]; then
     mv "$REPO_DIR" "$REPO_DIR.bak.$(date +%s)"
 fi
 
-git clone https://github.com/gavvahar/JARVIS-FRIDAY.git "$REPO_DIR"
+git clone https://gitlab.com/self-host-server/JARVIS-FRIDAY.git "$REPO_DIR"
 echo "✅ Config cloned"
 
 if [[ -f "$HOME/.bashrc" && ! -L "$HOME/.bashrc" ]]; then

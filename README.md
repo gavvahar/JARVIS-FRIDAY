@@ -20,19 +20,19 @@ JARVIS-FRIDAY/
 ### Bash
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/bash/setup.sh)
+bash <(curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/bash/setup.sh)
 ```
 
 ### Fish
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/fish/setup.sh | bash
+curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/fish/setup.sh | bash
 ```
 
 ### Zsh
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/install.sh | bash
+curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/zsh/install.sh | bash
 ```
 
 ### PowerShell (5.1 or 7+)
@@ -40,13 +40,13 @@ curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/ins
 Linux / macOS / WSL:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/powershell/install.ps1 | pwsh
+curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/powershell/install.ps1 | pwsh
 ```
 
 Windows (native PowerShell):
 
 ```powershell
-Invoke-RestMethod https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/powershell/install.ps1 | Invoke-Expression
+Invoke-RestMethod https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/powershell/install.ps1 | Invoke-Expression
 ```
 
 ## Tools installed
