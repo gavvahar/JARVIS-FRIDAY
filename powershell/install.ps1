@@ -149,7 +149,8 @@ if (Test-Path $PROFILE) {
 # ── Conda (optional) ──────────────────────────────────────────────────────────
 if (prompt-yn "Install Miniconda?") {
     $condaPath = "$HOME/miniconda3"
-    if (Test-Path "$condaPath/bin/conda") {
+    $condaExe  = if ($_IsWindows) { "$condaPath/Scripts/conda.exe" } else { "$condaPath/bin/conda" }
+    if ((Get-Command conda -ErrorAction SilentlyContinue) -or (Test-Path $condaExe)) {
         log "Conda already installed — skipping"
     } else {
         log "Installing Miniconda..."
