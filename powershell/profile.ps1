@@ -206,6 +206,32 @@ function jarvis {
 # ── brief ─────────────────────────────────────────────────────────────────────
 $script:_WeatherScript = "$_ConfigDir/get_weather.py"
 $script:_LocationsFile = "$_ConfigDir/jarvis-locations.json"
+$script:_UnitFile      = "$_ConfigDir/jarvis-weather-unit.txt"
+
+function _jv_load_unit {
+    if (Test-Path $script:_UnitFile) {
+        $u = (Get-Content $script:_UnitFile -Raw).Trim().ToUpper()
+        if ($u -eq 'C') { return 'C' }
+    }
+    return 'F'
+}
+
+function jarvis-unit {
+    param([string]$Unit = '')
+    if ($Unit -eq '') {
+        $current = _jv_load_unit
+        Write-Host "  ${_Color}${_C_DI}${_Reset} Temperature unit: ${_Bold}$current${_Reset}  (use 'jarvis-unit F' or 'jarvis-unit C' to change)"
+        return
+    }
+    $Unit = $Unit.ToUpper()
+    if ($Unit -ne 'F' -and $Unit -ne 'C') {
+        Write-Host "  Usage: jarvis-unit F   ${_C_EM} Fahrenheit"
+        Write-Host "         jarvis-unit C   ${_C_EM} Celsius"
+        return
+    }
+    Set-Content $script:_UnitFile $Unit
+    Write-Host "  ${_Color}${_C_DI}${_Reset} Temperature unit set to ${_Bold}$Unit${_Reset}"
+}
 
 function _jv_load_locations {
     if (Test-Path $script:_LocationsFile) {
@@ -227,14 +253,15 @@ function brief {
     $hdrFill = "$_C_HR" * ($width - $hdr.Length)
 
     $weatherLines = @()
+    $unit = _jv_load_unit
     if ((Test-Path $script:_WeatherScript) -and (Get-Command python3 -ErrorAction SilentlyContinue)) {
         if ($locs.Count -gt 0) {
             foreach ($loc in $locs) {
-                $w = & python3 $script:_WeatherScript $loc 2>$null
+                $w = & python3 $script:_WeatherScript $loc --unit $unit 2>$null
                 if ($w) { $weatherLines += $w }
             }
         } else {
-            $w = & python3 $script:_WeatherScript 2>$null
+            $w = & python3 $script:_WeatherScript --unit $unit 2>$null
             if ($w) { $weatherLines += $w }
         }
     }

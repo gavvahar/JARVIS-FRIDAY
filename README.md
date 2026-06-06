@@ -72,6 +72,7 @@ Invoke-RestMethod https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/p
 | `jarvis-locate remove "City, State"` | Remove a location                                     |
 | `jarvis-locate`                      | List saved locations                                  |
 | `jarvis-locate clear`                | Clear all locations, fall back to IP detection        |
+| `jarvis-unit F` / `jarvis-unit C`   | Set temperature unit (default: F)                     |
 
 ## Platform support
 

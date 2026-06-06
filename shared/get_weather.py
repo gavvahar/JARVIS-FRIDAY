@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, re
+import sys, re, argparse
 from datetime import datetime
 from urllib.request import urlopen
 
@@ -12,8 +12,9 @@ def get_ip_city():
         return None
 
 
-def fetch_weather(location):
-    url = f'https://wttr.in/{location.replace(" ", "+").replace(",", "")}?format=%T:::%l:::%C,+%t'
+def fetch_weather(location, unit):
+    unit_param = "&u" if unit == "F" else "&m"
+    url = f'https://wttr.in/{location.replace(" ", "+").replace(",", "")}?format=%T:::%l:::%C,+%t{unit_param}'
     try:
         with urlopen(url, timeout=5) as resp:
             raw = resp.read().decode().strip()
@@ -21,7 +22,6 @@ def fetch_weather(location):
         if len(parts) != 3:
             return None
         raw_time, loc_name, condition = parts
-        # parse "16:53:44-0400" → "04:53 PM"
         time_part = re.match(r"(\d{2}:\d{2})", raw_time)
         if time_part:
             local_time = datetime.strptime(time_part.group(1), "%H:%M").strftime(
@@ -31,13 +31,18 @@ def fetch_weather(location):
             local_time = raw_time
         condition = re.sub(r"\s+,", ",", condition).strip()
         condition = condition.replace("°", "")
-        return f"{loc_name.strip()}:::{local_time}:::{condition}"
+        return f"{loc_name.strip()}:::{ local_time}:::{condition}"
     except Exception:
         return None
 
 
-location = " ".join(sys.argv[1:]).strip() if len(sys.argv) > 1 else get_ip_city()
+parser = argparse.ArgumentParser()
+parser.add_argument("location", nargs="*")
+parser.add_argument("-u", "--unit", choices=["F", "C"], default="F")
+args = parser.parse_args()
+
+location = " ".join(args.location).strip() if args.location else get_ip_city()
 if location:
-    result = fetch_weather(location)
+    result = fetch_weather(location, args.unit)
     if result:
         print(result)
