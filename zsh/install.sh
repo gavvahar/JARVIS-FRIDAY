@@ -92,8 +92,8 @@ fi
 log "Downloading JARVIS config..."
 mkdir -p ~/zsh
 curl -fsSL "$RAW/.zshrc"               -o ~/zsh/.zshrc
-curl -fsSL "$RAW/starship.toml"        -o ~/zsh/starship.toml
-curl -fsSL "$RAW/starship-friday.toml" -o ~/zsh/starship-friday.toml
+curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/starship.toml"        -o ~/zsh/starship.toml
+curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/starship-friday.toml" -o ~/zsh/starship-friday.toml
 
 # ── ~/.zshrc ──────────────────────────────────────────────────────────────────
 ZSHRC_LINE='source ~/zsh/.zshrc'

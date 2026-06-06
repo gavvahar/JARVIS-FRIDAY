@@ -13,7 +13,7 @@ $_IsFriday = (Get-Date).DayOfWeek -eq 'Friday'
 $_ESC      = [char]27
 
 if ($_IsFriday) {
-    $env:STARSHIP_CONFIG = "$_ConfigDir/starship-friday.toml"
+    $env:STARSHIP_CONFIG = "$_ConfigDir/../shared/starship-friday.toml"
     $_Bold   = "$_ESC[1;38;2;192;132;252m"
     $_Color  = "$_ESC[38;2;192;132;252m"
     $_AIName = 'F.R.I.D.A.Y.'
@@ -28,7 +28,7 @@ if ($_IsFriday) {
         'Systems clear.'
     )
 } else {
-    $env:STARSHIP_CONFIG = "$_ConfigDir/starship.toml"
+    $env:STARSHIP_CONFIG = "$_ConfigDir/../shared/starship.toml"
     $_Bold   = "$_ESC[1;36m"
     $_Color  = "$_ESC[36m"
     $_AIName = 'J.A.R.V.I.S.'

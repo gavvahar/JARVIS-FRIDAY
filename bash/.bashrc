@@ -156,12 +156,12 @@ s.close()
 # ── AI theme — FRIDAY on Fridays, JARVIS all other days ──────────────────────
 if [ "$(date +%u)" -eq 5 ]; then
     export JARVIS_MODE="FRIDAY"
-    export STARSHIP_CONFIG="$_BASH_TERMINAL_DIR/starship-friday.toml"
+    export STARSHIP_CONFIG="$_BASH_TERMINAL_DIR/../shared/starship-friday.toml"
     _AI_BOLD=$'\e[1;38;2;192;132;252m'
     _AI_NORM=$'\e[38;2;192;132;252m'
 else
     export JARVIS_MODE="JARVIS"
-    export STARSHIP_CONFIG="$_BASH_TERMINAL_DIR/starship.toml"
+    export STARSHIP_CONFIG="$_BASH_TERMINAL_DIR/../shared/starship.toml"
     _AI_BOLD=$'\e[1;36m'
     _AI_NORM=$'\e[36m'
 fi
