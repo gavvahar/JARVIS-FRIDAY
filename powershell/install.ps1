@@ -150,14 +150,12 @@ if (Test-Path $PROFILE) {
 if (prompt-yn "Install Miniconda?") {
     $condaPath = "$HOME/miniconda3"
     $condaExe  = if ($_IsWindows) { "$condaPath/Scripts/conda.exe" } else { "$condaPath/bin/conda" }
-    if ((Get-Command conda -ErrorAction SilentlyContinue) -or (Test-Path $condaExe)) {
-        log "Conda already installed — skipping"
-    } else {
+    if (-not ((Get-Command conda -ErrorAction SilentlyContinue) -or (Test-Path $condaExe))) {
         log "Installing Miniconda..."
         if ($_IsWindows) {
             $installer = "$env:TEMP/miniconda.exe"
             Invoke-WebRequest 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe' -OutFile $installer
-            & $installer /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=$condaPath
+            & $installer /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S "/D=$condaPath"
             Remove-Item $installer -ErrorAction SilentlyContinue
         } elseif ($_IsMacOS) {
             $installer = '/tmp/miniconda.sh'
@@ -166,8 +164,12 @@ if (prompt-yn "Install Miniconda?") {
             $installer = '/tmp/miniconda.sh'
             & bash -c "curl -fsSL -o $installer https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && bash $installer -b -p $condaPath && rm $installer"
         }
+    } else {
+        log "Conda already installed — skipping install"
     }
-    log "Conda init done. Restart PowerShell to activate."
+    log "Running conda init powershell..."
+    & $condaExe init powershell
+    log "Conda ready. Restart PowerShell to activate."
 } else {
     log "Skipping Conda"
 }
