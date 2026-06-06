@@ -310,13 +310,16 @@ function jarvis-locate {
 # ── PSReadLine ────────────────────────────────────────────────────────────────
 if (Get-Module PSReadLine -ListAvailable -ErrorAction SilentlyContinue) {
     Import-Module PSReadLine
-    Set-PSReadLineOption -PredictionSource History
+    $psrlVersion = (Get-Module PSReadLine).Version
+    if ($psrlVersion -ge [version]'2.1.0') {
+        Set-PSReadLineOption -PredictionSource History
+    }
     Set-PSReadLineKeyHandler -Key Tab             -Function MenuComplete
     Set-PSReadLineKeyHandler -Key UpArrow         -Function HistorySearchBackward
     Set-PSReadLineKeyHandler -Key DownArrow       -Function HistorySearchForward
     Set-PSReadLineKeyHandler -Key Ctrl+LeftArrow  -Function BackwardWord
     Set-PSReadLineKeyHandler -Key Ctrl+RightArrow -Function ForwardWord
-    if ($_PSMajor -ge 7) {
+    if ($psrlVersion -ge [version]'2.2.0') {
         Set-PSReadLineOption -PredictionViewStyle ListView
     }
     if ($_IsFriday) {
