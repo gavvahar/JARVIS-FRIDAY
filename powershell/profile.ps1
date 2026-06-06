@@ -220,7 +220,7 @@ function brief {
     $period = if ($hour -lt 12) { 'morning' } elseif ($hour -lt 17) { 'afternoon' } else { 'evening' }
     $dt     = (Get-Date).ToString('dddd, MMMM dd yyyy ') + $_C_EM + (Get-Date).ToString(' hh:mm tt')
     $sys    = _jv_sysinfo
-    $locs   = _jv_load_locations
+    $locs   = @(_jv_load_locations)
     $width  = 60
     $sep    = "$_C_HR" * $width
     $hdr     = "${_C_HR}${_C_HR}[ $_AIName BRIEF ]"
@@ -275,7 +275,7 @@ function jarvis-locate {
     $loc = ($Rest -join ' ').Trim()
 
     if ($Sub -eq '' -or $Sub -eq 'list') {
-        $locs = _jv_load_locations
+        $locs = @(_jv_load_locations)
         if ($locs.Count -eq 0) {
             Write-Host "  ${_Color}${_C_DI}${_Reset} No locations set ${_C_EM} using IP detection."
         } else {
