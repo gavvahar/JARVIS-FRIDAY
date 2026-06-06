@@ -176,6 +176,7 @@ if (prompt-yn "Install Miniconda?") {
     }
     log "Running conda init powershell..."
     & $condaExe init powershell
+    & $condaExe config --set auto_activate_base false
     log "Conda ready. Restart PowerShell to activate."
 } else {
     log "Skipping Conda"

@@ -376,6 +376,7 @@ if (-not $_condaExe) {
 }
 if ($_condaExe) {
     (& $_condaExe 'shell.powershell' 'hook') | Out-String | Invoke-Expression
+    if ($env:CONDA_DEFAULT_ENV -eq 'base') { conda deactivate }
 }
 
 # ── Greeting ──────────────────────────────────────────────────────────────────
