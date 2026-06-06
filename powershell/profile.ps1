@@ -364,21 +364,18 @@ function gl  { git pull @args }
 
 # ── Conda ─────────────────────────────────────────────────────────────────────
 $_condaPaths = @(
-    "$HOME/miniconda3/Scripts/conda.exe",
+    (Join-Path $HOME 'miniconda3\Scripts\conda.exe'),
     "$HOME/miniconda3/bin/conda",
     "$HOME/opt/miniconda3/bin/conda",
-    "C:/ProgramData/miniconda3/Scripts/conda.exe"
+    'C:\ProgramData\miniconda3\Scripts\conda.exe'
 )
-$_condaFound = Get-Command conda -ErrorAction SilentlyContinue
-if ($_condaFound) {
-    (& conda 'shell.powershell' 'hook') | Out-String | Invoke-Expression
-} else {
-    foreach ($_cp in $_condaPaths) {
-        if (Test-Path $_cp) {
-            (& $_cp 'shell.powershell' 'hook') | Out-String | Invoke-Expression
-            break
-        }
-    }
+$_condaExe = Get-Command conda -ErrorAction SilentlyContinue |
+    Select-Object -ExpandProperty Source -ErrorAction SilentlyContinue
+if (-not $_condaExe) {
+    $_condaExe = $_condaPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+}
+if ($_condaExe) {
+    (& $_condaExe 'shell.powershell' 'hook') | Out-String | Invoke-Expression
 }
 
 # ── Greeting ──────────────────────────────────────────────────────────────────
