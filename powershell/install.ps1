@@ -164,7 +164,7 @@ if (prompt-yn "Install Miniconda?") {
         if ($_IsWindows) {
             $installer = Join-Path $env:TEMP 'miniconda.exe'
             Invoke-WebRequest 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe' -OutFile $installer
-            & $installer /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=$condaPath
+            Start-Process -FilePath $installer -ArgumentList "/InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=$condaPath" -Wait -NoNewWindow
             Remove-Item $installer -ErrorAction SilentlyContinue
         } elseif ($_IsMacOS) {
             $installer = '/tmp/miniconda.sh'
