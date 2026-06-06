@@ -30,6 +30,7 @@ def fetch_weather(location):
         else:
             local_time = raw_time
         condition = re.sub(r"\s+,", ",", condition).strip()
+        condition = condition.replace("°", "")
         return f"{loc_name.strip()}:::{local_time}:::{condition}"
     except Exception:
         return None
