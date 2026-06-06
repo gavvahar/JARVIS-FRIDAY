@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, re, argparse
+import re, argparse
 from datetime import datetime
 from urllib.request import urlopen
 
