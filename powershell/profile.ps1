@@ -61,7 +61,7 @@ $_C_EM = [char]0x2014  # em dash
 function _jv_row([string]$text, [int]$width) {
     $content = "  $text"
     if ($content.Length -gt $width) { $content = $content.Substring(0, $width) }
-    "$_Color  ${_C_VR}$($content.PadRight($width))${_C_VR}$_Reset"
+    "$_Bold  ${_C_VR}$($content.PadRight($width))${_C_VR}$_Reset"
 }
 
 function _jv_sep([int]$width) {
