@@ -37,7 +37,7 @@ function fish_greeting
         echo "  ║"(string pad -r -w $interior (string sub -l $interior "  Female Replacement Intelligent Digital Asst."))"║"
         echo "  ╠$sep╣"
         set_color normal
-        set_color c084fc
+        set_color --bold c084fc
         echo "  ║"(string pad -r -w $interior (string sub -l $interior "  Hey, "(whoami)". Good $period."))"║"
         echo "  ║"(string pad -r -w $interior (string sub -l $interior "  $datetime"))"║"
         if test -n "$uptime_str"
@@ -68,7 +68,7 @@ function fish_greeting
         echo "  ║"(string pad -r -w $interior (string sub -l $interior "  Just A Rather Very Intelligent System"))"║"
         echo "  ╠$sep╣"
         set_color normal
-        set_color cyan
+        set_color --bold cyan
         echo "  ║"(string pad -r -w $interior (string sub -l $interior "  Good $period, "(whoami)"."))"║"
         echo "  ║"(string pad -r -w $interior (string sub -l $interior "  $datetime"))"║"
         if test -n "$uptime_str"
