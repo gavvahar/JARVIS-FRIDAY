@@ -38,6 +38,8 @@ curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/zsh/inst
 
 ### Termux (Android)
 
+Install [Termux from F-Droid](https://f-droid.org/packages/com.termux/) (not the Play Store — that version is outdated), then run:
+
 ```bash
 curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/termux/install.sh | bash
 ```
