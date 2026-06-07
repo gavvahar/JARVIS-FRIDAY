@@ -2,7 +2,7 @@
 
 Terminal configurations themed after the AI assistants from Iron Man. Switches to **FRIDAY** mode (purple) on Fridays.
 
-Supports **bash**, **fish**, **zsh**, and **PowerShell**.
+Supports **bash**, **fish**, **zsh**, **PowerShell**, and **Termux** (Android).
 
 ## Repo structure
 
@@ -11,8 +11,9 @@ JARVIS-FRIDAY/
 ├── bash/        — Bash config (.bashrc, inputrc, install scripts, Starship prompt)
 ├── fish/        — Fish config (config.fish, functions/, conf.d/, install scripts, Starship prompt)
 ├── powershell/  — PowerShell config (profile.ps1, install.ps1, Starship prompt)
+├── termux/      — Termux (Android) install script
 ├── zsh/         — Zsh config (.zshrc, install script, Starship prompt)
-└── shared/      — Files shared across shells (get_weather.py)
+└── shared/      — Files shared across shells (get_weather.py, starship configs)
 ```
 
 ## Quick install
@@ -33,6 +34,12 @@ curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/fish/set
 
 ```bash
 curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/zsh/install.sh | bash
+```
+
+### Termux (Android)
+
+```bash
+curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/termux/install.sh | bash
 ```
 
 ### PowerShell (5.1 or 7+)
@@ -82,3 +89,4 @@ Invoke-RestMethod https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/p
 | macOS          | ✅ (requires bash 5 via Homebrew) | ✅   | ✅  | ✅ (pwsh 7+)    |
 | Windows WSL2   | ✅                                | ✅   | ✅  | ✅ (pwsh 7+)    |
 | Windows native | ✅ (Git Bash, no ble.sh)          | —    | —   | ✅ (5.1 and 7+) |
+| Android Termux | ✅                                | ✅   | ✅  | —               |

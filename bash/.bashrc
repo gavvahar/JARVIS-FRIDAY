@@ -10,7 +10,7 @@ esac
 [[ -f ~/.local/share/blesh/ble.sh ]] && source ~/.local/share/blesh/ble.sh --noattach
 
 # ── Config directory (where this repo is installed) ───────────────────────────
-_BASH_TERMINAL_DIR="$HOME/.config/bash-terminal"
+_BASH_TERMINAL_DIR="$HOME/.config/JARVIS-FRIDAY/bash"
 
 # ── OS detection ─────────────────────────────────────────────────────────────
 case "$(uname -s)" in
