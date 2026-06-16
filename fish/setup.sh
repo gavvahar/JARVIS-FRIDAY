@@ -12,13 +12,15 @@ echo "── Step 2: Clone Fish config ─────────────�
 curl -fsSL "$BASE/install.sh" | bash
 
 echo ""
-printf "── Step 3: Install tools (Zoxide, Fzf)? [y/N] " >/dev/tty
+printf "── Step 3: Install tools (Starship, Zoxide, Fzf)? [y/N] " >/dev/tty
 read -r tools </dev/tty || true
 if [[ "$tools" =~ ^[Yy]$ ]]; then
     curl -fsSL "$BASE/install-tools.sh" | bash
 else
     echo "Skipping tools install"
     sed -i 's/ \$HOME\/.fzf\/bin//' "$HOME/.config/fish/config.fish"
+    sed -i '/# 2\. Starship prompt/d' "$HOME/.config/fish/config.fish"
+    sed -i '/starship init fish | source/d' "$HOME/.config/fish/config.fish"
     sed -i '/# 2\. Initialize zoxide/d' "$HOME/.config/fish/config.fish"
     sed -i '/zoxide init fish | source/d' "$HOME/.config/fish/config.fish"
     sed -i '/# 3\. Enable fzf/d' "$HOME/.config/fish/config.fish"

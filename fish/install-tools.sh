@@ -2,6 +2,15 @@
 
 set -e
 
+# ── Starship ──────────────────────────────────────────────────────────────────
+if command -v starship &>/dev/null; then
+    echo "✅ Starship already installed"
+else
+    echo "Installing starship..."
+    curl -sS https://starship.rs/install.sh | sh -s -- --yes
+    echo "✅ Starship installed"
+fi
+
 # ── Zoxide ────────────────────────────────────────────────────────────────────
 if command -v zoxide &>/dev/null; then
     echo "✅ Zoxide already installed"
