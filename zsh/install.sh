@@ -28,14 +28,41 @@ pkg_install() {
     esac
 }
 
-# ── prerequisites ─────────────────────────────────────────────────────────────
-log "Installing prerequisites..."
+pkg_installed() {
+    case $(os) in
+        debian) dpkg -s "$1" &>/dev/null ;;
+        fedora) rpm -q "$1" &>/dev/null ;;
+        arch)   pacman -Qi "$1" &>/dev/null ;;
+        *)      return 1 ;;
+    esac
+}
+
+# ── prerequisites ───────────────────────────────────────────────────────────
 case $(os) in
-    debian) sudo apt-get update -qq && sudo apt-get install -y unzip curl git fontconfig libatomic1 ;;
-    fedora) sudo dnf install -y unzip curl git fontconfig ;;
-    arch)   sudo pacman -S --noconfirm unzip curl git fontconfig ;;
-    macos)  command -v brew &>/dev/null || err "Homebrew is required on macOS. Install from https://brew.sh" ;;
+    debian) PREREQS=(unzip curl git fontconfig libatomic1) ;;
+    fedora) PREREQS=(unzip curl git fontconfig) ;;
+    arch)   PREREQS=(unzip curl git fontconfig) ;;
+    macos)  PREREQS=() ;;
 esac
+
+if [[ "$(os)" == macos ]]; then
+    command -v brew &>/dev/null || err "Homebrew is required on macOS. Install from https://brew.sh"
+else
+    MISSING=()
+    for pkg in "${PREREQS[@]}"; do
+        pkg_installed "$pkg" || MISSING+=("$pkg")
+    done
+    if [[ ${#MISSING[@]} -eq 0 ]]; then
+        log "Prerequisites already installed — skipping"
+    else
+        log "Installing prerequisites: ${MISSING[*]}..."
+        case $(os) in
+            debian) sudo apt-get update -qq && sudo apt-get install -y "${MISSING[@]}" ;;
+            fedora) sudo dnf install -y "${MISSING[@]}" ;;
+            arch)   sudo pacman -S --noconfirm "${MISSING[@]}" ;;
+        esac
+    fi
+fi
 
 # ── zsh ───────────────────────────────────────────────────────────────────────
 if command -v zsh &>/dev/null; then
