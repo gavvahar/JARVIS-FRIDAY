@@ -138,15 +138,12 @@ ZSH_BIN=$(command -v zsh)
 if [[ "$SHELL" == "$ZSH_BIN" ]]; then
     log "Default shell is already zsh — skipping"
 else
-    printf "${CYAN}[J.A.R.V.I.S.]${RESET} Change default shell to zsh? [y/N] "
-    read -r reply
-    if [[ "$reply" =~ ^[Yy]$ ]]; then
-        if ! grep -qx "$ZSH_BIN" /etc/shells; then
-            echo "$ZSH_BIN" | sudo tee -a /etc/shells
-        fi
-        chsh -s "$ZSH_BIN"
-        log "Default shell changed. Log out and back in to apply."
+    log "Setting zsh as default shell..."
+    if ! grep -qx "$ZSH_BIN" /etc/shells; then
+        echo "$ZSH_BIN" | sudo tee -a /etc/shells
     fi
+    chsh -s "$ZSH_BIN"
+    log "Default shell changed. Log out and back in to apply."
 fi
 
 # ── miniconda ─────────────────────────────────────────────────────────────────
