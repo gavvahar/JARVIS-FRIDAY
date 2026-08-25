@@ -27,13 +27,13 @@ bash <(curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/b
 ### Fish
 
 ```bash
-curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/fish/setup.sh | bash
+bash <(curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/fish/setup.sh)
 ```
 
 ### Zsh
 
 ```bash
-curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/zsh/install.sh | bash
+bash <(curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/zsh/install.sh)
 ```
 
 ### Termux (Android)
@@ -41,7 +41,7 @@ curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/zsh/inst
 Install [Termux from F-Droid](https://f-droid.org/packages/com.termux/) (not the Play Store — that version is outdated), then run:
 
 ```bash
-curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/termux/install.sh | bash
+bash <(curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/termux/install.sh)
 ```
 
 ### PowerShell (5.1 or 7+)
@@ -49,7 +49,7 @@ curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/termux/i
 Linux / macOS / WSL:
 
 ```bash
-curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/powershell/install.ps1 | pwsh
+curl -fsSL https://gitlab.com/self-host-server/JARVIS-FRIDAY/-/raw/main/powershell/install.ps1 -o /tmp/jarvis-install.ps1 && pwsh /tmp/jarvis-install.ps1; rm -f /tmp/jarvis-install.ps1
 ```
 
 Windows (native PowerShell):
