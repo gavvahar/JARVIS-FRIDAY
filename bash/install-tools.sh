@@ -2,23 +2,13 @@
 
 set -e
 
-_OS="$(uname -s)"
-
 # ── Starship ──────────────────────────────────────────────────────────────────
 if command -v starship &>/dev/null; then
     echo "✅ Starship already installed"
 else
     echo "Installing starship..."
-    case "$_OS" in
-        MINGW*|MSYS*|CYGWIN*)
-            # /usr/local/bin doesn't exist in Git Bash; install to ~/.local/bin
-            mkdir -p "$HOME/.local/bin"
-            curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir "$HOME/.local/bin" --yes
-            ;;
-        *)
-            curl -sS https://starship.rs/install.sh | sh -s -- --yes
-            ;;
-    esac
+    mkdir -p "$HOME/.local/bin"
+    curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir "$HOME/.local/bin" --yes
     echo "✅ Starship installed"
 fi
 

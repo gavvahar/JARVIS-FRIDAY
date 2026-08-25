@@ -7,7 +7,8 @@ if command -v starship &>/dev/null; then
     echo "✅ Starship already installed"
 else
     echo "Installing starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- --yes
+    mkdir -p "$HOME/.local/bin"
+    curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir "$HOME/.local/bin" --yes
     echo "✅ Starship installed"
 fi
 

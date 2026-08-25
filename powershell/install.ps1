@@ -94,7 +94,7 @@ if ($_IsWindows) {
         }
         if (-not (Get-Command starship -ErrorAction SilentlyContinue)) {
             log "Installing starship..."
-            & bash -c 'curl -sS https://starship.rs/install.sh | sh -s -- --yes'
+            & bash -c 'mkdir -p "$HOME/.local/bin" && curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir "$HOME/.local/bin" --yes'
         }
     } else {
         log "All tools already installed"

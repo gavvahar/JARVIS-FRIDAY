@@ -77,7 +77,8 @@ if command -v starship &>/dev/null; then
     log "starship already installed — skipping"
 else
     log "Installing starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- --yes
+    mkdir -p "$HOME/.local/bin"
+    curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir "$HOME/.local/bin" --yes
 fi
 
 # ── fzf ───────────────────────────────────────────────────────────────────────
