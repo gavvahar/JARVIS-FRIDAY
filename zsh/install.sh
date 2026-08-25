@@ -39,9 +39,9 @@ pkg_installed() {
 
 # ── prerequisites ───────────────────────────────────────────────────────────
 case $(os) in
-    debian) PREREQS=(unzip curl git fontconfig libatomic1 wl-clipboard xclip) ;;
-    fedora) PREREQS=(unzip curl git fontconfig wl-clipboard xclip) ;;
-    arch)   PREREQS=(unzip curl git fontconfig wl-clipboard xclip) ;;
+    debian) PREREQS=(unzip curl git fontconfig libatomic1) ;;
+    fedora) PREREQS=(unzip curl git fontconfig) ;;
+    arch)   PREREQS=(unzip curl git fontconfig) ;;
     macos)  PREREQS=() ;;
 esac
 
