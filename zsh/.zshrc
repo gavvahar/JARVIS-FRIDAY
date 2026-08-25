@@ -66,6 +66,7 @@ bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[^[[C' forward-word
 bindkey '^[^[[D' backward-word
+bindkey -r '^V'
 
 # ─── Terminal title ───────────────────────────────────────────────────────────
 function _jarvis_title { print -Pn "\e]0;J.A.R.V.I.S. — %~\a" }
