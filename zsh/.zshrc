@@ -1,3 +1,6 @@
+# ─── Path ─────────────────────────────────────────────────────────────────────
+export PATH="$HOME/.local/bin:$HOME/.fzf/bin:$PATH"
+
 # ─── Completions ──────────────────────────────────────────────────────────────
 autoload -Uz compinit && compinit
 
@@ -83,9 +86,6 @@ alias ga='git add'
 alias gc='git commit'
 alias gp='git push'
 alias gl='git pull'
-
-# ─── Path ─────────────────────────────────────────────────────────────────────
-export PATH="$HOME/.local/bin:$HOME/.fzf/bin:$PATH"
 
 # ─── Prompt (Starship) ────────────────────────────────────────────────────────
 eval "$(starship init zsh)"
