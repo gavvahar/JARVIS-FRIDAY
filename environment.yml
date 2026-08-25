@@ -6,5 +6,7 @@ channels:
 dependencies:
   - python
   - pip
+  - gh
+  - make
   - pip:
       - -r requirements.txt
