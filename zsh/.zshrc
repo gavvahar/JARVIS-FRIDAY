@@ -67,6 +67,23 @@ bindkey '^[[1;5D' backward-word
 bindkey '^[^[[C' forward-word
 bindkey '^[^[[D' backward-word
 
+# ─── Clipboard paste (mirrors fish's fish_clipboard_paste) ───────────────────
+function _jarvis_clipboard_paste {
+    local clip
+    if command -v wl-paste &>/dev/null; then
+        clip=$(wl-paste --no-newline 2>/dev/null)
+    elif command -v pbpaste &>/dev/null; then
+        clip=$(pbpaste 2>/dev/null)
+    elif command -v xclip &>/dev/null; then
+        clip=$(xclip -selection clipboard -o 2>/dev/null)
+    elif command -v xsel &>/dev/null; then
+        clip=$(xsel --clipboard --output 2>/dev/null)
+    fi
+    LBUFFER+="$clip"
+}
+zle -N _jarvis_clipboard_paste
+bindkey '^V' _jarvis_clipboard_paste
+
 # ─── Terminal title ───────────────────────────────────────────────────────────
 function _jarvis_title { print -Pn "\e]0;J.A.R.V.I.S. — %~\a" }
 precmd_functions+=(_jarvis_title)
