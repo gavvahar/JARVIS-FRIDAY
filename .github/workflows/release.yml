@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine next version
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          HEAD_SHA=$(git rev-parse HEAD)
+          LATEST_TAG=$(gh release view --json tagName -q .tagName 2>/dev/null || echo "")
+
+          if [ -n "$LATEST_TAG" ] && [ "$(git rev-parse "$LATEST_TAG")" = "$HEAD_SHA" ]; then
+            echo "main is unchanged since $LATEST_TAG, skipping release"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Base commit to diff for bump detection: previous release, or repo root if none exists
+          if [ -n "$LATEST_TAG" ]; then
+            BASE_SHA=$(git rev-parse "$LATEST_TAG")
+          else
+            BASE_SHA=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          LOG=$(git log --format="%s%n%b" "$BASE_SHA..$HEAD_SHA")
+
+          if echo "$LOG" | grep -qE '^[a-z]+(\([^)]+\))?!:|^BREAKING CHANGE:'; then
+            BUMP="major"
+          elif echo "$LOG" | grep -qE '^feat(\([^)]+\))?:'; then
+            BUMP="minor"
+          else
+            BUMP="patch"
+          fi
+
+          # Version counter tracks semver tags only, independent of the tag naming used previously (e.g. date tags)
+          PREV_SEMVER=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | tail -1)
+          PREV_SEMVER="${PREV_SEMVER#v}"
+          PREV_SEMVER="${PREV_SEMVER:-0.0.0}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$PREV_SEMVER"
+
+          case "$BUMP" in
+            major) MAJOR=$((MAJOR+1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR+1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH+1)) ;;
+          esac
+
+          NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
+          if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
+            echo "Tag $NEW_TAG already exists, skipping release"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+          echo "base=$BASE_SHA" >> "$GITHUB_OUTPUT"
+          # Human-readable label for the Full Changelog link: the previous release
+          # tag when there is one, otherwise a short SHA (never the raw 40-char hash).
+          echo "prev=${LATEST_TAG:-$(git rev-parse --short "$BASE_SHA")}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate changelog from commits
+        if: steps.version.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          CLIFF_VER=$(curl -sf "https://api.github.com/repos/orhun/git-cliff/releases/latest" \
+            | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'].lstrip('v'))")
+          curl -fsSL \
+            "https://github.com/orhun/git-cliff/releases/download/v${CLIFF_VER}/git-cliff-${CLIFF_VER}-x86_64-unknown-linux-musl.tar.gz" \
+            | tar -xz -C /tmp
+          CLIFF=$(find /tmp -name "git-cliff" -type f | head -1)
+          chmod +x "$CLIFF"
+
+          # git-cliff splits the range into a separate chunk at every merge commit
+          # (cascade-merge syncs create one on nearly every dev/main push), which
+          # produces duplicate category headers if rendered via its own Jinja body
+          # template. Dump raw --context JSON instead and do the grouping/rendering
+          # ourselves, reusing pyproject.toml's [tool.git-cliff.git] commit_parsers
+          # (the same config used for PR descriptions) as the single source of truth
+          # for commit categorization.
+          #
+          # --github-repo resolves each commit to its merging PR's author/number
+          # (rendered as "by @user in #123" in gen_release_notes.py). That call hits
+          # the GitHub API and hard-fails the whole command on any hiccup (rate
+          # limit, outage), so fall back to --offline on failure rather than losing
+          # the release over an attribution lookup — gen_release_notes.py already
+          # falls back to the raw git author name when GitHub data is unavailable.
+          if ! "$CLIFF" --config pyproject.toml --github-repo "${{ github.repository }}" --context \
+            "${{ steps.version.outputs.base }}..HEAD" \
+            > /tmp/cliff_context.json 2>/tmp/cliff_err.txt; then
+            echo "::warning::git-cliff GitHub attribution lookup failed, falling back to --offline"
+            cat /tmp/cliff_err.txt
+            "$CLIFF" --config pyproject.toml --offline --context \
+              "${{ steps.version.outputs.base }}..HEAD" \
+              > /tmp/cliff_context.json
+          fi
+
+          python3 .github/scripts/gen_release_notes.py /tmp/cliff_context.json \
+            > /tmp/release_notes.md
+
+          printf '\n**Full Changelog**: %s...%s\n' \
+            "${{ steps.version.outputs.prev }}" "${{ steps.version.outputs.tag }}" \
+            >> /tmp/release_notes.md
+
+      - name: Create release
+        if: steps.version.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --target main \
+            --title "${{ steps.version.outputs.tag }}" \
+            --notes-file /tmp/release_notes.md
