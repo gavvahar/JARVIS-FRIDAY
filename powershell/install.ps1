@@ -15,10 +15,7 @@ function prompt-yn([string]$msg) {
     return $reply -match '^[Yy]$'
 }
 
-$_PSMajor   = $PSVersionTable.PSVersion.Major
-$_IsWindows = if ($_PSMajor -ge 6) { $IsWindows } else { $env:OS -eq 'Windows_NT' }
-$_IsLinux   = if ($_PSMajor -ge 6) { $IsLinux }   else { $false }
-$_IsMacOS   = if ($_PSMajor -ge 6) { $IsMacOS }   else { $false }
+Invoke-Expression (Invoke-RestMethod 'https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/powershell/_platform.ps1')
 
 $REPO_URL   = 'https://github.com/gavvahar/JARVIS-FRIDAY.git'
 $REPO_DIR   = "$HOME/.config/JARVIS-FRIDAY"

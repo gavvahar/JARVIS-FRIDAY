@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CYAN=$'\e[1;36m'; YELLOW=$'\e[1;33m'; RED=$'\e[1;31m'; RESET=$'\e[0m'
-log()  { printf "${CYAN}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
-warn() { printf "${YELLOW}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
-err()  { printf "${RED}[J.A.R.V.I.S.]${RESET} %s\n" "$*" >&2; exit 1; }
+source <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/shell-colors.sh")
 
 RAW="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh"
 
@@ -148,19 +145,7 @@ fi
 
 # ── miniconda ─────────────────────────────────────────────────────────────────
 CONDA="$HOME/miniconda3/bin/conda"
-if command -v conda &>/dev/null || [[ -x "$CONDA" ]]; then
-    log "conda already installed — skipping"
-else
-    log "Installing Miniconda..."
-    if [[ "$OSTYPE" == darwin* ]]; then
-        curl -fsSL -o /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
-    else
-        curl -fsSL -o /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    fi
-    bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
-    rm /tmp/miniconda.sh
-    log "Miniconda installed"
-fi
+bash <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/install-miniconda.sh")
 "$CONDA" init zsh
 if "$CONDA" config --show auto_activate_base 2>/dev/null | grep -q "True"; then
     "$CONDA" config --set auto_activate_base false

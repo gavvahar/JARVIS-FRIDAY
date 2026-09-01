@@ -1,10 +1,7 @@
 # ─── J.A.R.V.I.S. / F.R.I.D.A.Y. — PowerShell Profile ──────────────────────
 
 # ── OS & version detection ────────────────────────────────────────────────────
-$_PSMajor   = $PSVersionTable.PSVersion.Major
-$_IsWindows = if ($_PSMajor -ge 6) { $IsWindows } else { $env:OS -eq 'Windows_NT' }
-$_IsLinux   = if ($_PSMajor -ge 6) { $IsLinux }   else { $false }
-$_IsMacOS   = if ($_PSMajor -ge 6) { $IsMacOS }   else { $false }
+. "$PSScriptRoot/_platform.ps1"
 
 $_ConfigDir = $PSScriptRoot
 
