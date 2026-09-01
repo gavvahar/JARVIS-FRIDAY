@@ -259,8 +259,12 @@ if [[ -z "${BLE_VERSION-}" ]]; then
         fi
     }
 
-    bind -x '"\e[A": __hist_bk'
-    bind -x '"\e[B": __hist_fw'
+    # Bind both normal (\e[) and application-cursor-mode (\eO) sequences —
+    # which one a terminal sends for arrow keys depends on its kcuu1/kcud1
+    # terminfo (e.g. xterm-256color reports \eOA/\eOB).
+    for _seq in '\e[A' '\eOA'; do bind -x "\"$_seq\": __hist_bk"; done
+    for _seq in '\e[B' '\eOB'; do bind -x "\"$_seq\": __hist_fw"; done
+    unset _seq
 fi
 
 # ── Starship prompt ───────────────────────────────────────────────────────────
