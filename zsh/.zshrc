@@ -62,6 +62,8 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # ─── Key bindings ─────────────────────────────────────────────────────────────
 bindkey '^[[A' history-beginning-search-backward
 bindkey '^[[B' history-beginning-search-forward
+bindkey '^[OA' history-beginning-search-backward
+bindkey '^[OB' history-beginning-search-forward
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[^[[C' forward-word
