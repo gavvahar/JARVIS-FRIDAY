@@ -32,12 +32,7 @@ repo = os.environ["GITHUB_REPOSITORY"]
 with open(context_path) as f:
     releases = json.load(f)
 
-commits = [
-    commit
-    for release in releases
-    for commit in (release.get("commits") or [])
-    if not commit.get("merge_commit")
-]
+commits = [commit for release in releases for commit in (release.get("commits") or []) if not commit.get("merge_commit")]
 
 by_group = {}
 for commit in commits:
@@ -69,9 +64,7 @@ for group in order:
         else:
             attribution = f"by {commit['author']['name']}"
 
-        lines.append(
-            f"- {message} {attribution} ([`{short_sha}`](https://github.com/{repo}/commit/{commit['id']}))"
-        )
+        lines.append(f"- {message} {attribution} ([`{short_sha}`](https://github.com/{repo}/commit/{commit['id']}))")
     lines.append("")
 
 print("\n".join(lines).rstrip() + "\n")

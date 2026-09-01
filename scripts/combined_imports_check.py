@@ -76,9 +76,7 @@ def main():
             fixed_files.append(path)
         else:
             names = ", ".join(alias_text(a) for n in imports for a in n.names)
-            violations.append(
-                f"{path}:{imports[0].lineno}: combine into one line: import {names}"
-            )
+            violations.append(f"{path}:{imports[0].lineno}: combine into one line: import {names}")
     if fix:
         if fixed_files:
             print(f"✅ Combined imports in {len(fixed_files)} file(s):")
@@ -87,9 +85,7 @@ def main():
             print("✅ No combinable imports found. All good!")
         return
     if violations:
-        print(
-            "❌ Error: files with multiple bare imports that should be combined onto one line!"
-        )
+        print("❌ Error: files with multiple bare imports that should be combined onto one line!")
         print("\n".join(violations))
         sys.exit(1)
     print("✅ No combinable imports found. All good!")

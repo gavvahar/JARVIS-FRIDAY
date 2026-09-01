@@ -74,15 +74,11 @@ def get_login_for_sha(sha, token, repo):
     return (data.get("author") or {}).get("login", "")
 
 
-def open_conflict_issue(
-    source, branch, conflicting, trigger_sha, token, repo, run_id, server_url
-):
+def open_conflict_issue(source, branch, conflicting, trigger_sha, token, repo, run_id, server_url):
     short_sha = trigger_sha[:7]
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-    last_sha = run(
-        ["git", "log", "-1", "--format=%H", f"origin/{branch}"]
-    ).stdout.strip()
+    last_sha = run(["git", "log", "-1", "--format=%H", f"origin/{branch}"]).stdout.strip()
     login = get_login_for_sha(last_sha, token, repo)
 
     rows = "\n".join(f"| `{path}` | {ctype} |" for path, ctype in conflicting)
@@ -172,9 +168,7 @@ def main():
     run_id = os.environ.get("GITHUB_RUN_ID", "")
 
     run_check(["git", "config", "user.name", "github-actions[bot]"])
-    run_check(
-        ["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"]
-    )
+    run_check(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"])
     run_check(["git", "fetch", "--all", "--prune"])
 
     raw = run(["git", "branch", "-r", "--format=%(refname:short)"]).stdout.splitlines()
@@ -194,9 +188,7 @@ def main():
 
     ensure_label(token, repo)
     push_url = f"https://x-access-token:{token}@github.com/{repo}.git"
-    trigger_sha = run(
-        ["git", "log", "-1", "--format=%H", f"origin/{source}"]
-    ).stdout.strip()
+    trigger_sha = run(["git", "log", "-1", "--format=%H", f"origin/{source}"]).stdout.strip()
 
     for branch in branches:
         print(f"\n{'=' * 60}\nCascade: {source} → {branch}")
@@ -242,9 +234,7 @@ def main():
         conflicting = collect_conflicts()
         run(["git", "merge", "--abort"])
 
-        open_conflict_issue(
-            source, branch, conflicting, trigger_sha, token, repo, run_id, server_url
-        )
+        open_conflict_issue(source, branch, conflicting, trigger_sha, token, repo, run_id, server_url)
 
 
 if __name__ == "__main__":
