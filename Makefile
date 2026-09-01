@@ -1,4 +1,4 @@
-.PHONY: fmt lint
+.PHONY: fmt lint secrets
 
 fmt:
 	black .
@@ -9,3 +9,6 @@ fmt:
 lint:
 	make fmt
 	tox -e all
+
+secrets:
+	tox -e secret-detection
