@@ -10,7 +10,7 @@ if [[ ! -d "/data/data/com.termux" ]]; then
     err "This script must run inside Termux on Android."
 fi
 
-REPO_URL="https://gitlab.com/self-host-server/JARVIS-FRIDAY.git"
+REPO_URL="https://github.com/gavvahar/JARVIS-FRIDAY.git"
 REPO_DIR="$HOME/.config/JARVIS-FRIDAY"
 
 printf "\n${CYAN}  ╔══[ J.A.R.V.I.S. TERMUX SETUP ]════════╗${RESET}\n"
