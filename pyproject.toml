@@ -15,7 +15,7 @@ select = ["E", "F", "B"]
 ignore = ["E203", "E501", "E701", "E401", "B008"]
 
 [tool.tox]
-env_list = ["lint", "txt-lint", "format", "prettier"]
+env_list = ["lint", "txt-lint", "format", "prettier", "duplicate-code"]
 work_dir = "/tmp/.tox"
 
 [tool.tox.env_run_base]
@@ -53,6 +53,14 @@ skip_install = true
 allowlist_externals = ["npx"]
 commands = [["npx", "prettier", "--check", "**/*.{json,yml,yaml,md}"]]
 
+[tool.tox.env."duplicate-code"]
+skip_install = true
+allowlist_externals = ["npx", "npm"]
+commands = [
+    ["npm", "install", "--save-dev", "jscpd"],
+    ["npx", "jscpd", "."],
+]
+
 [tool.tox.env."secret-detection"]
 skip_install = true
 allowlist_externals = ["docker"]
@@ -82,6 +90,7 @@ commands = [
     ["tox", "-e", "lint"],
     ["tox", "-e", "txt-lint"],
     ["tox", "-e", "prettier"],
+    ["tox", "-e", "duplicate-code"],
 ]
 
 [tool.git-cliff.changelog]
