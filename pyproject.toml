@@ -44,6 +44,10 @@ commands = [["black", ".", "--check"]]
 skip_install = true
 commands = [["python3", "scripts/no_classes_check.py"]]
 
+[tool.tox.env."combined-imports-check"]
+skip_install = true
+commands = [["python3", "scripts/combined_imports_check.py"]]
+
 [tool.tox.env.prettier]
 skip_install = true
 allowlist_externals = ["npx"]
@@ -67,13 +71,14 @@ commands = [
     ],
 ]
 
-# Aggregate env: runs format, no-classes-check, and lint in order
+# Aggregate env: runs format, no-classes-check, combined-imports-check, and lint in order
 [tool.tox.env.all]
 skip_install = true
 allowlist_externals = ["tox"]
 commands = [
     ["tox", "-e", "format"],
     ["tox", "-e", "no-classes-check"],
+    ["tox", "-e", "combined-imports-check"],
     ["tox", "-e", "lint"],
     ["tox", "-e", "txt-lint"],
     ["tox", "-e", "prettier"],
