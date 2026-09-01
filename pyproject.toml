@@ -37,8 +37,8 @@ commands = [
 ]
 
 [tool.tox.env.format]
-deps = ["black"]
-commands = [["black", ".", "--check"]]
+deps = ["ruff"]
+commands = [["ruff", "format", "--no-cache", "--check", "."]]
 
 [tool.tox.env."no-classes-check"]
 skip_install = true
