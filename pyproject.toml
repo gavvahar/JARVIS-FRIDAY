@@ -49,6 +49,24 @@ skip_install = true
 allowlist_externals = ["npx"]
 commands = [["npx", "prettier", "--check", "**/*.{json,yml,yaml,md}"]]
 
+[tool.tox.env."secret-detection"]
+skip_install = true
+allowlist_externals = ["docker"]
+commands = [
+    [
+        "docker",
+        "run",
+        "--rm",
+        "-v",
+        "{toxinidir}:/repo",
+        "trufflesecurity/trufflehog:latest",
+        "git",
+        "file:///repo",
+        "--results=verified,unverified,unknown",
+        "--fail",
+    ],
+]
+
 # Aggregate env: runs format, no-classes-check, and lint in order
 [tool.tox.env.all]
 skip_install = true
