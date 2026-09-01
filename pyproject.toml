@@ -1,0 +1,62 @@
+[tool.ruff]
+line-length = 180
+exclude = [
+    "__pycache__",
+    "manage.py",
+    "venv",
+    ".tox",
+    ".venv",
+    "tests.py",
+    "env",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "B"]
+ignore = ["E203", "E501", "E701", "E401", "B008"]
+
+[tool.tox]
+env_list = ["lint", "txt-lint", "format", "prettier"]
+work_dir = "/tmp/.tox"
+
+[tool.tox.env_run_base]
+skip_install = true
+pass_env = ["PATH"]
+set_env = { VIRTUALENV_OVERRIDE_APP_DATA = "{work_dir}/.virtualenv" }
+
+[tool.tox.env.lint]
+base_python = "python3"
+deps = ["ruff"]
+commands = [["ruff", "check", "--no-cache", "."]]
+
+[tool.tox.env."txt-lint"]
+skip_install = true
+allowlist_externals = ["npx", "npm"]
+commands = [
+    ["npm", "install", "--save-dev", "textlint", "textlint-rule-common-misspellings", "textlint-rule-write-good"],
+    ["npx", "textlint", "--rule", "common-misspellings", "--rule", "write-good", "**/*.txt"],
+]
+
+[tool.tox.env.format]
+deps = ["black"]
+commands = [["black", ".", "--check"]]
+
+[tool.tox.env."no-classes-check"]
+skip_install = true
+commands = [["python3", "scripts/no_classes_check.py"]]
+
+[tool.tox.env.prettier]
+skip_install = true
+allowlist_externals = ["npx"]
+commands = [["npx", "prettier", "--check", "**/*.{json,yml,yaml,md}"]]
+
+# Aggregate env: runs format, no-classes-check, and lint in order
+[tool.tox.env.all]
+skip_install = true
+allowlist_externals = ["tox"]
+commands = [
+    ["tox", "-e", "format"],
+    ["tox", "-e", "no-classes-check"],
+    ["tox", "-e", "lint"],
+    ["tox", "-e", "txt-lint"],
+    ["tox", "-e", "prettier"],
+]
