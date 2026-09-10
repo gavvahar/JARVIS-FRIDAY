@@ -1,4 +1,4 @@
-name: jarvis
+name: friday
 channels:
   - defaults
   - conda-forge
