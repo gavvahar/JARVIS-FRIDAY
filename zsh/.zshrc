@@ -1,5 +1,5 @@
 # ─── Path ─────────────────────────────────────────────────────────────────────
-export PATH="$HOME/.local/bin:$HOME/.fzf/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.fzf/bin:$PATH"
 
 # ─── Completions ──────────────────────────────────────────────────────────────
 autoload -Uz compinit && compinit
