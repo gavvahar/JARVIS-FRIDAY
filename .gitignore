@@ -29,3 +29,4 @@ node_modules/
 .zcompdump
 .zcompdump-*
 .bin/
+.env
