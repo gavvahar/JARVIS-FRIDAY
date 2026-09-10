@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "jscpd": "^5.1.1",
+    "jscpd": "^5.2.0",
     "textlint": "^15.8.0",
     "textlint-rule-common-misspellings": "^1.0.1",
     "textlint-rule-write-good": "^2.0.0"
