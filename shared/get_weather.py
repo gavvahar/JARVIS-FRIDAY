@@ -14,7 +14,7 @@ def get_ip_city():
 
 def fetch_weather(location, unit):
     unit_param = "&u" if unit == "F" else "&m"
-    url = f'https://wttr.in/{location.replace(" ", "+").replace(",", "")}?format=%T:::%l:::%C,+%t{unit_param}'
+    url = f"https://wttr.in/{location.replace(' ', '+').replace(',', '')}?format=%T:::%l:::%C,+%t{unit_param}"
     try:
         with urlopen(url, timeout=5) as resp:
             raw = resp.read().decode().strip()
@@ -24,14 +24,12 @@ def fetch_weather(location, unit):
         raw_time, loc_name, condition = parts
         time_part = re.match(r"(\d{2}:\d{2})", raw_time)
         if time_part:
-            local_time = datetime.strptime(time_part.group(1), "%H:%M").strftime(
-                "%I:%M %p"
-            )
+            local_time = datetime.strptime(time_part.group(1), "%H:%M").strftime("%I:%M %p")
         else:
             local_time = raw_time
         condition = re.sub(r"\s+,", ",", condition).strip()
         condition = condition.replace("°", "")
-        return f"{loc_name.strip()}:::{ local_time}:::{condition}"
+        return f"{loc_name.strip()}:::{local_time}:::{condition}"
     except Exception:
         return None
 

@@ -38,6 +38,7 @@ shopt -s checkwinsize
 
 # ── PATH ──────────────────────────────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$PATH"
+[[ ":$PATH:" != *":$HOME/bin:"* ]] && [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 [[ ":$PATH:" != *":$HOME/.fzf/bin:"* ]] && [ -d "$HOME/.fzf/bin" ] && export PATH="$HOME/.fzf/bin:$PATH"
 if [[ "$_JARVIS_OS" == "mac" ]]; then
     [ -d "/opt/homebrew/bin" ] && [[ ":$PATH:" != *":/opt/homebrew/bin:"* ]] && export PATH="/opt/homebrew/bin:$PATH"
@@ -259,8 +260,12 @@ if [[ -z "${BLE_VERSION-}" ]]; then
         fi
     }
 
-    bind -x '"\e[A": __hist_bk'
-    bind -x '"\e[B": __hist_fw'
+    # Bind both normal (\e[) and application-cursor-mode (\eO) sequences —
+    # which one a terminal sends for arrow keys depends on its kcuu1/kcud1
+    # terminfo (e.g. xterm-256color reports \eOA/\eOB).
+    for _seq in '\e[A' '\eOA'; do bind -x "\"$_seq\": __hist_bk"; done
+    for _seq in '\e[B' '\eOB'; do bind -x "\"$_seq\": __hist_fw"; done
+    unset _seq
 fi
 
 # ── Starship prompt ───────────────────────────────────────────────────────────

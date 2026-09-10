@@ -1,0 +1,127 @@
+[tool.ruff]
+line-length = 180
+exclude = [
+    "__pycache__",
+    "manage.py",
+    "venv",
+    ".tox",
+    ".venv",
+    "tests.py",
+    "env",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "B"]
+ignore = ["E203", "E501", "E701", "E401", "B008"]
+
+[tool.tox]
+env_list = ["lint", "txt-lint", "format", "prettier", "duplicate-code"]
+work_dir = "/tmp/.tox"
+
+[tool.tox.env_run_base]
+skip_install = true
+pass_env = ["PATH"]
+set_env = { VIRTUALENV_OVERRIDE_APP_DATA = "{work_dir}/.virtualenv" }
+
+[tool.tox.env.lint]
+base_python = "python3"
+deps = ["ruff"]
+commands = [["ruff", "check", "--no-cache", "."]]
+
+[tool.tox.env."txt-lint"]
+skip_install = true
+allowlist_externals = ["npx", "npm"]
+commands = [
+    ["npm", "install", "--save-dev", "textlint", "textlint-rule-common-misspellings", "textlint-rule-write-good"],
+    ["npx", "textlint", "--rule", "common-misspellings", "--rule", "write-good", "**/*.txt"],
+]
+
+[tool.tox.env.format]
+deps = ["ruff"]
+commands = [["ruff", "format", "--no-cache", "--check", "."]]
+
+[tool.tox.env."no-classes-check"]
+skip_install = true
+commands = [["python3", "scripts/no_classes_check.py"]]
+
+[tool.tox.env."combined-imports-check"]
+skip_install = true
+commands = [["python3", "scripts/combined_imports_check.py"]]
+
+[tool.tox.env.prettier]
+skip_install = true
+allowlist_externals = ["npx"]
+commands = [["npx", "prettier", "--check", "**/*.{json,yml,yaml,md}"]]
+
+[tool.tox.env."duplicate-code"]
+skip_install = true
+allowlist_externals = ["npx", "npm"]
+commands = [
+    ["npm", "install", "--save-dev", "jscpd"],
+    ["npx", "jscpd", "."],
+]
+
+[tool.tox.env."secret-detection"]
+skip_install = true
+allowlist_externals = ["docker"]
+commands = [
+    [
+        "docker",
+        "run",
+        "--rm",
+        "-v",
+        "{toxinidir}:/repo",
+        "trufflesecurity/trufflehog:latest",
+        "git",
+        "file:///repo",
+        "--results=verified,unverified,unknown",
+        "--fail",
+    ],
+]
+
+# Aggregate env: runs format, no-classes-check, combined-imports-check, and lint in order
+[tool.tox.env.all]
+skip_install = true
+allowlist_externals = ["tox"]
+commands = [
+    ["tox", "-e", "format"],
+    ["tox", "-e", "no-classes-check"],
+    ["tox", "-e", "combined-imports-check"],
+    ["tox", "-e", "lint"],
+    ["tox", "-e", "txt-lint"],
+    ["tox", "-e", "prettier"],
+    ["tox", "-e", "duplicate-code"],
+]
+
+[tool.git-cliff.changelog]
+header = ""
+body = """
+## Summary
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group }}
+{% for commit in commits %}
+- {{ commit.message | upper_first }}
+{%- endfor %}
+{% endfor %}
+
+## Test plan
+
+- [ ] Review the changes above
+- [ ] Existing tests pass
+"""
+trim = true
+
+[tool.git-cliff.git]
+conventional_commits = true
+filter_unconventional = false
+commit_parsers = [
+  { message = "^feat", group = "✨ Features" },
+  { message = "^fix", group = "🐛 Bug Fixes" },
+  { message = "^docs", group = "📚 Documentation" },
+  { message = "^refactor", group = "♻️ Refactoring" },
+  { message = "^test", group = "🧪 Tests" },
+  { message = "^perf", group = "⚡ Performance" },
+  { message = "^chore", group = "🔧 Chores" },
+  { message = "^lint", group = "🔧 Chores" },
+  { message = ".*", group = "📝 Changes" },
+]

@@ -1,5 +1,5 @@
 # 1. Ensure Fish can find zoxide and other local binaries
-fish_add_path $HOME/.local/bin $HOME/.fzf/bin
+fish_add_path $HOME/.local/bin $HOME/bin $HOME/.fzf/bin
 
 # AI theme — FRIDAY on Fridays, JARVIS all other days
 if test (date "+%u") -eq 5

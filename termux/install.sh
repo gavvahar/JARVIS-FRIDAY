@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CYAN=$'\e[1;36m'; YELLOW=$'\e[1;33m'; RED=$'\e[1;31m'; RESET=$'\e[0m'
-log()  { printf "${CYAN}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
-warn() { printf "${YELLOW}[J.A.R.V.I.S.]${RESET} %s\n" "$*"; }
-err()  { printf "${RED}[J.A.R.V.I.S.]${RESET} %s\n" "$*" >&2; exit 1; }
+source <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/shell-colors.sh")
 
 if [[ ! -d "/data/data/com.termux" ]]; then
     err "This script must run inside Termux on Android."
 fi
 
-REPO_URL="https://gitlab.com/self-host-server/JARVIS-FRIDAY.git"
+REPO_URL="https://github.com/gavvahar/JARVIS-FRIDAY.git"
 REPO_DIR="$HOME/.config/JARVIS-FRIDAY"
 
 printf "\n${CYAN}  ╔══[ J.A.R.V.I.S. TERMUX SETUP ]════════╗${RESET}\n"
