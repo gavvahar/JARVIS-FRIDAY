@@ -222,11 +222,29 @@ commands = [
 # Static analysis of GitHub Actions workflows (unpinned actions, template
 # injection, credential persistence, excessive permissions, etc). Picks up
 # GH_TOKEN/GITHUB_TOKEN from the environment automatically if set, which
-# raises unauthenticated GitHub API rate limits for its online audits.
+# raises unauthenticated GitHub API rate limits for its online audits. Falls
+# back to offline-only audits with a warning if no token is set — use
+# zizmor-online instead where you want that to be a hard failure.
 [tool.tox.env.zizmor]
 skip_install = true
 deps = ["zizmor"]
 commands = [["zizmor", "."]]
+
+# Same audits as zizmor above, but fails fast if no GitHub token is set
+# instead of silently degrading to offline-only audits. Use this where a
+# token is expected to be present (e.g. CI) and you want to be sure the
+# online audits (which need GitHub API access) actually ran.
+[tool.tox.env."zizmor-online"]
+skip_install = true
+allowlist_externals = ["sh"]
+deps = ["zizmor"]
+commands = [
+  [
+    "sh",
+    "-c",
+    "if [ -z \"$GH_TOKEN\" ] && [ -z \"$GITHUB_TOKEN\" ]; then echo 'zizmor-online requires GH_TOKEN or GITHUB_TOKEN to be set' >&2; exit 1; fi; zizmor .",
+  ],
+]
 
 # --- Aggregate (CI) ---------------------------------------------------------
 
