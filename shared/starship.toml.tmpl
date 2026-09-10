@@ -1,15 +1,15 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 continuation_prompt = "[.](bright-black) "
-format = "$fill[── F.R.I.D.A.Y. ──](bold #c084fc)$fill\n$all"
+format = "$fill[── @@TITLE@@ ──](@@PRIMARY@@)$fill\n$all"
 right_format = "$time   $battery"
 
 [fill]
 symbol = "─"
-style = "bold #c084fc"
+style = "@@PRIMARY@@"
 
 [character]
-success_symbol = "[❯](bold #c084fc)"
+success_symbol = "[❯](@@PRIMARY@@)"
 error_symbol = "[❯](bold red)"
 vimcmd_symbol = "[<](bold green)"
 vimcmd_visual_symbol = "[<](bold yellow)"
@@ -17,11 +17,11 @@ vimcmd_replace_symbol = "[<](bold purple)"
 vimcmd_replace_one_symbol = "[<](bold purple)"
 
 [cmd_duration]
-style = "bold #fbbf24"
+style = "@@SEC_CMDDUR@@"
 min_time = 2000
 
 [username]
-style_user = "bold #c084fc"
+style_user = "@@PRIMARY@@"
 style_root = "bold red"
 show_always = false
 
@@ -31,11 +31,11 @@ ssh_only = true
 style = "bold blue"
 
 [directory]
-style = "bold #c084fc"
+style = "@@PRIMARY@@"
 read_only = " ro"
 
 [git_branch]
-style = "bold #fbbf24"
+style = "@@SEC_GITBRANCH@@"
 symbol = "git "
 truncation_symbol = "..."
 
@@ -43,7 +43,7 @@ truncation_symbol = "..."
 tag_symbol = " tag "
 
 [git_status]
-style = "bold #fbbf24"
+style = "@@SEC_GITSTATUS@@"
 ahead = ">"
 behind = "<"
 diverged = "<>"
@@ -51,11 +51,11 @@ renamed = "r"
 deleted = "x"
 
 [conda]
-style = "bold #fbbf24"
+style = "@@SEC_CONDA@@"
 symbol = "conda "
 
 [python]
-style = "bold #c084fc"
+style = "@@PRIMARY@@"
 symbol = "py "
 format = 'via [${symbol}(${version} )]($style)'
 
@@ -83,11 +83,11 @@ style = "bold yellow"
 
 [[battery.display]]
 threshold = 100
-style = "bold #c084fc"
+style = "@@PRIMARY@@"
 
 [time]
 disabled = false
-style = "bold #c084fc"
+style = "@@PRIMARY@@"
 format = "[$time]($style)"
 time_format = "%I:%M %p"
 

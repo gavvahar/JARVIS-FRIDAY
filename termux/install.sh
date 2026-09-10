@@ -46,6 +46,14 @@ else
 fi
 log "Config ready at $REPO_DIR"
 
+# bash/.bashrc reads shared/starship*.toml straight out of this clone at
+# every shell startup, and the zsh/fish setups below copy them from here too,
+# so render both themes into it now (see shared/starship.toml.tmpl).
+bash "$REPO_DIR/shared/render-starship-theme.sh" "$REPO_DIR/shared/starship.toml.tmpl" "$REPO_DIR/shared/starship.toml" \
+    "J.A.R.V.I.S." "bold cyan" "bold yellow" "bold blue" "bold cyan" "bold blue"
+bash "$REPO_DIR/shared/render-starship-theme.sh" "$REPO_DIR/shared/starship.toml.tmpl" "$REPO_DIR/shared/starship-friday.toml" \
+    "F.R.I.D.A.Y." "bold #c084fc" "bold #fbbf24" "bold #fbbf24" "bold #fbbf24" "bold #fbbf24"
+
 # ── Shell setup ───────────────────────────────────────────────────────────────
 if [[ "$SHELL_NAME" == "bash" ]]; then
     log "Setting up bash..."

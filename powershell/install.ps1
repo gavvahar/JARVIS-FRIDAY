@@ -44,6 +44,26 @@ if (Test-Path $REPO_DIR) {
 }
 log "Config ready at $INSTALL_DIR"
 
+# ── Render starship themes ────────────────────────────────────────────────────
+# profile.ps1 reads shared/starship*.toml straight out of this clone at every
+# shell startup, so render both themes into it now (see shared/starship.toml.tmpl).
+function Render-StarshipTheme($Template, $OutFile, $Title, $Primary, $SecCmdDur, $SecGitBranch, $SecGitStatus, $SecConda) {
+    (Get-Content $Template -Raw) `
+        -replace '@@TITLE@@', $Title `
+        -replace '@@PRIMARY@@', $Primary `
+        -replace '@@SEC_CMDDUR@@', $SecCmdDur `
+        -replace '@@SEC_GITBRANCH@@', $SecGitBranch `
+        -replace '@@SEC_GITSTATUS@@', $SecGitStatus `
+        -replace '@@SEC_CONDA@@', $SecConda |
+        Set-Content -NoNewline $OutFile
+}
+
+$starshipTmpl = "$REPO_DIR/shared/starship.toml.tmpl"
+Render-StarshipTheme $starshipTmpl "$REPO_DIR/shared/starship.toml" `
+    'J.A.R.V.I.S.' 'bold cyan' 'bold yellow' 'bold blue' 'bold cyan' 'bold blue'
+Render-StarshipTheme $starshipTmpl "$REPO_DIR/shared/starship-friday.toml" `
+    'F.R.I.D.A.Y.' 'bold #c084fc' 'bold #fbbf24' 'bold #fbbf24' 'bold #fbbf24' 'bold #fbbf24'
+
 # ── Install tools ─────────────────────────────────────────────────────────────
 log "Installing tools..."
 

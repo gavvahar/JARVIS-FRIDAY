@@ -13,7 +13,7 @@ JARVIS-FRIDAY/
 ├── powershell/  — PowerShell config (profile.ps1, install.ps1, Starship prompt)
 ├── termux/      — Termux (Android) install script
 ├── zsh/         — Zsh config (.zshrc, install script, Starship prompt)
-└── shared/      — Files shared across shells (get_weather.py, starship configs)
+└── shared/      — Files shared across shells (get_weather.py, starship theme template + renderer)
 ```
 
 ## Quick install

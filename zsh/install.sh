@@ -2,8 +2,10 @@
 set -euo pipefail
 
 source <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/shell-colors.sh")
+source <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/render-starship-theme.sh")
 
 RAW="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh"
+SHARED_RAW="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared"
 
 # ── OS detection ──────────────────────────────────────────────────────────────
 os() {
@@ -117,8 +119,12 @@ fi
 log "Downloading JARVIS config..."
 mkdir -p ~/zsh
 curl -fsSL "$RAW/.zshrc"               -o ~/zsh/.zshrc
-curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/starship.toml"        -o ~/zsh/starship.toml
-curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/starship-friday.toml" -o ~/zsh/starship-friday.toml
+curl -fsSL "$SHARED_RAW/starship.toml.tmpl" -o /tmp/starship.toml.tmpl
+render_starship_theme /tmp/starship.toml.tmpl ~/zsh/starship.toml \
+    "J.A.R.V.I.S." "bold cyan" "bold yellow" "bold blue" "bold cyan" "bold blue"
+render_starship_theme /tmp/starship.toml.tmpl ~/zsh/starship-friday.toml \
+    "F.R.I.D.A.Y." "bold #c084fc" "bold #fbbf24" "bold #fbbf24" "bold #fbbf24" "bold #fbbf24"
+rm -f /tmp/starship.toml.tmpl
 
 # ── ~/.zshrc ──────────────────────────────────────────────────────────────────
 ZSHRC_LINE='source ~/zsh/.zshrc'

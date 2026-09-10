@@ -13,6 +13,13 @@ fi
 git clone https://github.com/gavvahar/JARVIS-FRIDAY.git "$REPO_DIR"
 echo "✅ Config cloned"
 
+# .bashrc reads shared/starship*.toml straight out of this clone at every
+# shell startup, so render both themes into it now (see shared/starship.toml.tmpl).
+bash "$REPO_DIR/shared/render-starship-theme.sh" "$REPO_DIR/shared/starship.toml.tmpl" "$REPO_DIR/shared/starship.toml" \
+    "J.A.R.V.I.S." "bold cyan" "bold yellow" "bold blue" "bold cyan" "bold blue"
+bash "$REPO_DIR/shared/render-starship-theme.sh" "$REPO_DIR/shared/starship.toml.tmpl" "$REPO_DIR/shared/starship-friday.toml" \
+    "F.R.I.D.A.Y." "bold #c084fc" "bold #fbbf24" "bold #fbbf24" "bold #fbbf24" "bold #fbbf24"
+
 if [[ -f "$HOME/.bashrc" && ! -L "$HOME/.bashrc" ]]; then
     echo "Backing up existing ~/.bashrc..."
     mv "$HOME/.bashrc" "$HOME/.bashrc.bak.$(date +%s)"
