@@ -6,6 +6,9 @@ on:
       tox_env:
         required: true
         type: string
+    secrets:
+      GH_PAT:
+        required: false
 
 jobs:
   quality:
@@ -32,4 +35,6 @@ jobs:
       - name: Run tox (${{ inputs.tox_env }})
         env:
           INPUTS_TOX_ENV: ${{ inputs.tox_env }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ github.token }}
         run: tox -e "${INPUTS_TOX_ENV}"

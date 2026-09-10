@@ -8,6 +8,6 @@ jobs:
   quality:
     permissions:
       contents: read
-    uses: $/.github/workflows/tox-check-reusable.yml
+    uses: ./.github/workflows/tox-check-reusable.yml
     with:
       tox_env: duplicate-code
