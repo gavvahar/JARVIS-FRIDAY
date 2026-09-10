@@ -14,9 +14,10 @@ jobs:
       pull-requests: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Determine next version
         id: version
@@ -79,6 +80,9 @@ jobs:
         if: steps.version.outputs.skip == 'false'
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          BASE_SHA: ${{ steps.version.outputs.base }}
+          PREV_TAG: ${{ steps.version.outputs.prev }}
+          NEW_TAG: ${{ steps.version.outputs.tag }}
         run: |
           CLIFF_VER=$(curl -sf "https://api.github.com/repos/orhun/git-cliff/releases/latest" \
             | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'].lstrip('v'))")
@@ -103,12 +107,12 @@ jobs:
           # the release over an attribution lookup — gen_release_notes.py already
           # falls back to the raw git author name when GitHub data is unavailable.
           if ! "$CLIFF" --config pyproject.toml --github-repo "${{ github.repository }}" --context \
-            "${{ steps.version.outputs.base }}..HEAD" \
+            "$BASE_SHA..HEAD" \
             > /tmp/cliff_context.json 2>/tmp/cliff_err.txt; then
             echo "::warning::git-cliff GitHub attribution lookup failed, falling back to --offline"
             cat /tmp/cliff_err.txt
             "$CLIFF" --config pyproject.toml --offline --context \
-              "${{ steps.version.outputs.base }}..HEAD" \
+              "$BASE_SHA..HEAD" \
               > /tmp/cliff_context.json
           fi
 
@@ -116,15 +120,16 @@ jobs:
             > /tmp/release_notes.md
 
           printf '\n**Full Changelog**: %s...%s\n' \
-            "${{ steps.version.outputs.prev }}" "${{ steps.version.outputs.tag }}" \
+            "$PREV_TAG" "$NEW_TAG" \
             >> /tmp/release_notes.md
 
       - name: Create release
         if: steps.version.outputs.skip == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
+          NEW_TAG: ${{ steps.version.outputs.tag }}
         run: |
-          gh release create "${{ steps.version.outputs.tag }}" \
+          gh release create "$NEW_TAG" \
             --target main \
-            --title "${{ steps.version.outputs.tag }}" \
+            --title "$NEW_TAG" \
             --notes-file /tmp/release_notes.md
