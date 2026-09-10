@@ -1,97 +1,6 @@
-[tool.ruff]
-line-length = 180
-exclude = [
-    "__pycache__",
-    "manage.py",
-    "venv",
-    ".tox",
-    ".venv",
-    "tests.py",
-    "env",
-]
-
-[tool.ruff.lint]
-select = ["E", "F", "B"]
-ignore = ["E203", "E501", "E701", "E401", "B008"]
-
-[tool.tox]
-env_list = ["lint", "txt-lint", "format", "prettier", "duplicate-code"]
-work_dir = "/tmp/.tox"
-
-[tool.tox.env_run_base]
-skip_install = true
-pass_env = ["PATH"]
-set_env = { VIRTUALENV_OVERRIDE_APP_DATA = "{work_dir}/.virtualenv" }
-
-[tool.tox.env.lint]
-base_python = "python3"
-deps = ["ruff"]
-commands = [["ruff", "check", "--no-cache", "."]]
-
-[tool.tox.env."txt-lint"]
-skip_install = true
-allowlist_externals = ["npx", "npm"]
-commands = [
-    ["npm", "install", "--save-dev", "textlint", "textlint-rule-common-misspellings", "textlint-rule-write-good"],
-    ["npx", "textlint", "--rule", "common-misspellings", "--rule", "write-good", "**/*.txt"],
-]
-
-[tool.tox.env.format]
-deps = ["ruff"]
-commands = [["ruff", "format", "--no-cache", "--check", "."]]
-
-[tool.tox.env."no-classes-check"]
-skip_install = true
-commands = [["python3", "scripts/no_classes_check.py"]]
-
-[tool.tox.env."combined-imports-check"]
-skip_install = true
-commands = [["python3", "scripts/combined_imports_check.py"]]
-
-[tool.tox.env.prettier]
-skip_install = true
-allowlist_externals = ["npx"]
-commands = [["npx", "prettier", "--check", "**/*.{json,yml,yaml,md}"]]
-
-[tool.tox.env."duplicate-code"]
-skip_install = true
-allowlist_externals = ["npx", "npm"]
-commands = [
-    ["npm", "install", "--save-dev", "jscpd"],
-    ["npx", "jscpd", "."],
-]
-
-[tool.tox.env."secret-detection"]
-skip_install = true
-allowlist_externals = ["docker"]
-commands = [
-    [
-        "docker",
-        "run",
-        "--rm",
-        "-v",
-        "{toxinidir}:/repo",
-        "trufflesecurity/trufflehog:latest",
-        "git",
-        "file:///repo",
-        "--results=verified,unverified,unknown",
-        "--fail",
-    ],
-]
-
-# Aggregate env: runs format, no-classes-check, combined-imports-check, and lint in order
-[tool.tox.env.all]
-skip_install = true
-allowlist_externals = ["tox"]
-commands = [
-    ["tox", "-e", "format"],
-    ["tox", "-e", "no-classes-check"],
-    ["tox", "-e", "combined-imports-check"],
-    ["tox", "-e", "lint"],
-    ["tox", "-e", "txt-lint"],
-    ["tox", "-e", "prettier"],
-    ["tox", "-e", "duplicate-code"],
-]
+# =============================================================================
+# GIT-CLIFF — PR description generator
+# =============================================================================
 
 [tool.git-cliff.changelog]
 header = ""
@@ -124,4 +33,287 @@ commit_parsers = [
   { message = "^chore", group = "🔧 Chores" },
   { message = "^lint", group = "🔧 Chores" },
   { message = ".*", group = "📝 Changes" },
+]
+
+# =============================================================================
+# RUFF — Python linter & formatter
+# =============================================================================
+
+[tool.ruff]
+line-length = 180
+exclude = ["__pycache__", "venv", ".tox", ".venv", "tests.py", "env"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B"]
+ignore = ["E203", "E501", "E701", "E401", "B008"]
+
+
+# =============================================================================
+# TOX — Test & task runner
+# =============================================================================
+
+# Default envs run when you type `tox` with no arguments
+[tool.tox]
+env_list = [
+  "lint",
+  "txt-lint",
+  "format",
+  "prettier",
+  "toml-lint",
+  "duplicate-code",
+]
+work_dir = "/tmp/.tox"
+
+# Shared base config inherited by all envs
+[tool.tox.env_run_base]
+# GH_TOKEN/GITHUB_TOKEN: needed by the zizmor env, and must be listed here
+# (not just on that env) so it survives nested `tox -e X` calls (docker ->
+# zizmor, all -> docker -> zizmor) — each level only inherits what the level
+# above already had in pass_env, it doesn't re-consult the original shell env.
+pass_env = ["PATH", "GH_TOKEN", "GITHUB_TOKEN"]
+set_env = { VIRTUALENV_OVERRIDE_APP_DATA = "{work_dir}/.virtualenv", PRETTIER_GLOB = "**/*.{css,js,html,json,yml,yaml,md}" }
+
+# --- Linting ----------------------------------------------------------------
+
+[tool.tox.env.lint]
+skip_install = true
+base_python = "python3"
+deps = ["ruff"]
+commands = [["ruff", "check", "--no-cache", "."]]
+
+[tool.tox.env."txt-lint"]
+skip_install = true
+allowlist_externals = ["npx", "npm"]
+commands = [
+  [
+    "npm",
+    "install",
+    "--save-dev",
+    "textlint",
+    "textlint-rule-common-misspellings",
+    "textlint-rule-write-good",
+  ],
+  [
+    "npx",
+    "textlint",
+    "--rule",
+    "common-misspellings",
+    "--rule",
+    "write-good",
+    "**/*.txt",
+  ],
+]
+
+[tool.tox.env."combined-imports-check"]
+skip_install = true
+deps = []
+commands = [["python3", "scripts/combined_imports_check.py"]]
+
+[tool.tox.env."no-classes-check"]
+skip_install = true
+deps = []
+commands = [["python3", "scripts/no_classes_check.py"]]
+
+# --- Formatting -------------------------------------------------------------
+
+[tool.tox.env.format]
+skip_install = true
+deps = ["ruff", "ty"]
+allowlist_externals = ["npx"]
+commands = [
+  [
+    "python3",
+    "scripts/combined_imports_check.py",
+    "--fix",
+  ],
+  [
+    "ruff",
+    "format",
+    "--no-cache",
+    "--verbose",
+    ".",
+  ],
+  [
+    "ruff",
+    "check",
+    "--no-cache",
+    "--fix",
+    "--verbose",
+    ".",
+  ],
+  [
+    "npx",
+    "prettier",
+    "--write",
+    "--log-level",
+    "log",
+    "{env:PRETTIER_GLOB}",
+  ],
+  [
+    "npx",
+    "@taplo/cli",
+    "fmt",
+    "--no-auto-config",
+    "**/*.toml",
+  ],
+]
+
+[tool.tox.env.scss]
+skip_install = true
+allowlist_externals = ["npx"]
+commands = [["npx", "sass", "--no-source-map", "static/scss:static/css"]]
+
+[tool.tox.env.prettier]
+skip_install = true
+allowlist_externals = ["npx"]
+commands = [["npx", "prettier", "--check", "{env:PRETTIER_GLOB}"]]
+
+[tool.tox.env."toml-lint"]
+skip_install = true
+allowlist_externals = ["npx"]
+commands = [
+  [
+    "npx",
+    "@taplo/cli",
+    "fmt",
+    "--check",
+    "--no-auto-config",
+    "**/*.toml",
+  ],
+  [
+    "npx",
+    "@taplo/cli",
+    "lint",
+    "--no-auto-config",
+    "**/*.toml",
+  ],
+]
+
+# --- Duplication --------------------------------------------------------
+
+# Zero-tolerance duplicate-code check (jscpd, config in .jscpd.json). Real
+# duplication found should be refactored into a shared file the callers
+# source/import, not waved off by raising the threshold.
+[tool.tox.env."duplicate-code"]
+skip_install = true
+allowlist_externals = ["npx", "npm"]
+commands = [["npm", "install", "--save-dev", "jscpd"], ["npx", "jscpd", "."]]
+
+# --- Security -----------------------------------------------------------
+
+[tool.tox.env."secret-detection"]
+skip_install = true
+allowlist_externals = ["docker"]
+commands = [
+  [
+    "docker",
+    "run",
+    "--rm",
+    "-v",
+    "{toxinidir}:/repo",
+    "trufflesecurity/trufflehog:latest",
+    "git",
+    "file:///repo",
+    "--results=verified,unverified,unknown",
+    "--fail",
+  ],
+]
+
+# Static analysis of GitHub Actions workflows (unpinned actions, template
+# injection, credential persistence, excessive permissions, etc). Picks up
+# GH_TOKEN/GITHUB_TOKEN from the environment automatically if set, which
+# raises unauthenticated GitHub API rate limits for its online audits.
+[tool.tox.env.zizmor]
+skip_install = true
+deps = ["zizmor"]
+commands = [["zizmor", "."]]
+
+# --- Aggregate (CI) ---------------------------------------------------------
+
+# Runs the full CI chain: no-classes-check → lint → txt-lint → prettier → tests
+[tool.tox.env.github]
+skip_install = true
+deps = []
+allowlist_externals = ["tox"]
+commands = [
+  [
+    "tox",
+    "-e",
+    "no-classes-check",
+  ],
+  [
+    "tox",
+    "-e",
+    "lint",
+  ],
+  [
+    "tox",
+    "-e",
+    "txt-lint",
+  ],
+  [
+    "tox",
+    "-e",
+    "prettier",
+  ],
+  [
+    "tox",
+    "-e",
+    "toml-lint",
+  ],
+  [
+    "tox",
+    "-e",
+    "combined-imports-check",
+  ],
+]
+
+[tool.tox.env.docker]
+skip_install = true
+deps = []
+allowlist_externals = ["tox"]
+commands = [
+  [
+    "tox",
+    "-e",
+    "github",
+  ],
+  [
+    "tox",
+    "-e",
+    "secret-detection",
+  ],
+  [
+    "tox",
+    "-e",
+    "duplicate-code",
+  ],
+  [
+    "tox",
+    "-e",
+    "zizmor",
+  ],
+]
+
+# Runs format then the full github chain
+[tool.tox.env.all]
+skip_install = true
+deps = []
+allowlist_externals = ["tox"]
+commands = [
+  [
+    "tox",
+    "-e",
+    "format",
+  ],
+  [
+    "tox",
+    "-e",
+    "docker",
+  ],
+  [
+    "tox",
+    "-e",
+    "secret-detection",
+  ],
 ]
