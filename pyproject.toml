@@ -67,8 +67,8 @@ work_dir = "/tmp/.tox"
 # Shared base config inherited by all envs
 [tool.tox.env_run_base]
 # GH_TOKEN/GITHUB_TOKEN: needed by the zizmor env, and must be listed here
-# (not just on that env) so it survives nested `tox -e X` calls (docker ->
-# zizmor, all -> docker -> zizmor) — each level only inherits what the level
+# (not just on that env) so it survives nested `tox -e X` calls (github ->
+# zizmor, all -> github -> zizmor) — each level only inherits what the level
 # above already had in pass_env, it doesn't re-consult the original shell env.
 pass_env = ["PATH", "GH_TOKEN", "GITHUB_TOKEN"]
 set_env = { VIRTUALENV_OVERRIDE_APP_DATA = "{work_dir}/.virtualenv", PRETTIER_GLOB = "**/*.{css,js,html,json,yml,yaml,md}" }
@@ -203,17 +203,17 @@ commands = [["npm", "install", "--save-dev", "jscpd"], ["npx", "jscpd", "."]]
 
 [tool.tox.env."secret-detection"]
 skip_install = true
-allowlist_externals = ["docker"]
+allowlist_externals = ["sh", ".bin/trufflehog"]
 commands = [
   [
-    "docker",
-    "run",
-    "--rm",
-    "-v",
-    "{toxinidir}:/repo",
-    "trufflesecurity/trufflehog:latest",
+    "sh",
+    "-c",
+    "curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b .bin",
+  ],
+  [
+    ".bin/trufflehog",
     "git",
-    "file:///repo",
+    "file://{toxinidir}",
     "--results=verified,unverified,unknown",
     "--fail",
   ],
@@ -230,7 +230,8 @@ commands = [["zizmor", "."]]
 
 # --- Aggregate (CI) ---------------------------------------------------------
 
-# Runs the full CI chain: no-classes-check → lint → txt-lint → prettier → tests
+# Runs the full CI chain: no-classes-check → lint → txt-lint → prettier →
+# toml-lint → combined-imports-check → secret-detection → duplicate-code → zizmor
 [tool.tox.env.github]
 skip_install = true
 deps = []
@@ -266,18 +267,6 @@ commands = [
     "-e",
     "combined-imports-check",
   ],
-]
-
-[tool.tox.env.docker]
-skip_install = true
-deps = []
-allowlist_externals = ["tox"]
-commands = [
-  [
-    "tox",
-    "-e",
-    "github",
-  ],
   [
     "tox",
     "-e",
@@ -309,11 +298,6 @@ commands = [
   [
     "tox",
     "-e",
-    "docker",
-  ],
-  [
-    "tox",
-    "-e",
-    "secret-detection",
+    "github",
   ],
 ]
