@@ -38,6 +38,8 @@ fi
 # ── Upterm (self-hosted terminal-sharing relay client) ───────────────────────
 if command -v upterm &>/dev/null; then
     echo "✅ Upterm already installed"
+elif [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* ]]; then
+    echo "⚠️  Skipping upterm on Windows — not yet wired up (PowerShell has no winget package for it either)"
 else
     UPTERM_VERSION="v0.25.1"
     case "$(uname -s)-$(uname -m)" in
