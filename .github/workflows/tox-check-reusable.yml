@@ -1,0 +1,35 @@
+name: Tox check (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      tox_env:
+        required: true
+        type: string
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python3
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.x"
+          cache: "pip"
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Run tox (${{ inputs.tox_env }})
+        env:
+          INPUTS_TOX_ENV: ${{ inputs.tox_env }}
+        run: tox -e "${INPUTS_TOX_ENV}"
