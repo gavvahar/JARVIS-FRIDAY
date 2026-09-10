@@ -235,9 +235,11 @@ commands = [["zizmor", "."]]
 # falling back to GH_TOKEN — same GH_PAT || github.token shape used in
 # cascade-merge.yml — since GH_PAT isn't subject to the default token's
 # tighter cross-repo API limits. zizmor itself only reads GH_TOKEN, not
-# GH_PAT, so GH_PAT is passed through as GH_TOKEN. Use this where a token
-# is expected to be present (e.g. CI) and you want to be sure the online
-# audits (which need GitHub API access) actually ran.
+# GH_PAT, so GH_PAT is passed through as GH_TOKEN. Reads a local .env file
+# (gitignored) if present, so the token doesn't need to be exported in the
+# shell for local runs. Use this where a token is expected to be present
+# (e.g. CI) and you want to be sure the online audits (which need GitHub
+# API access) actually ran.
 [tool.tox.env."zizmor-online"]
 skip_install = true
 allowlist_externals = ["sh"]
@@ -247,7 +249,7 @@ commands = [
   [
     "sh",
     "-c",
-    "TOKEN=$GH_PAT; if [ -z \"$TOKEN\" ]; then TOKEN=$GH_TOKEN; fi; if [ -z \"$TOKEN\" ]; then echo 'zizmor-online requires GH_PAT or GH_TOKEN to be set' >&2; exit 1; fi; GH_TOKEN=$TOKEN zizmor .",
+    "if [ -f .env ]; then set -a; . ./.env; set +a; fi; TOKEN=$GH_PAT; if [ -z \"$TOKEN\" ]; then TOKEN=$GH_TOKEN; fi; if [ -z \"$TOKEN\" ]; then echo 'zizmor-online requires GH_PAT or GH_TOKEN to be set (env var or .env)' >&2; exit 1; fi; GH_TOKEN=$TOKEN zizmor .",
   ],
 ]
 
