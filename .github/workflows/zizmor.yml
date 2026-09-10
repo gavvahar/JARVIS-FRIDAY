@@ -12,4 +12,4 @@ jobs:
       contents: read
     uses: $/.github/workflows/tox-check-reusable.yml
     with:
-      tox_env: zizmor
+      tox_env: zizmor-online
