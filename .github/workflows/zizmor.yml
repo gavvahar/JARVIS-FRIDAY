@@ -13,3 +13,5 @@ jobs:
     uses: $/.github/workflows/tox-check-reusable.yml
     with:
       tox_env: zizmor-online
+    secrets:
+      GH_PAT: ${{ secrets.GH_PAT }}
