@@ -1,11 +1,11 @@
 {
   "devDependencies": {
-    "jscpd": "^5.2.0",
+    "jscpd": "^5.2.1",
     "textlint": "^15.8.0",
     "textlint-rule-common-misspellings": "^1.0.1",
     "textlint-rule-write-good": "^2.0.0"
   },
   "dependencies": {
-    "prettier": "^3.8.3"
+    "prettier": "^3.9.8"
   }
 }
