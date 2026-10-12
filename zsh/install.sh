@@ -7,69 +7,14 @@ source <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/ma
 RAW="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh"
 SHARED_RAW="https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared"
 
-# ── OS detection ──────────────────────────────────────────────────────────────
-os() {
-    if   [[ "$OSTYPE" == darwin* ]];          then echo macos
-    elif command -v apt-get &>/dev/null;      then echo debian
-    elif command -v dnf     &>/dev/null;      then echo fedora
-    elif command -v pacman  &>/dev/null;      then echo arch
-    else                                           echo unknown
-    fi
-}
-
-pkg_install() {
-    case $(os) in
-        macos)   brew install "$@" ;;
-        debian)  sudo apt-get install -y "$@" ;;
-        fedora)  sudo dnf install -y "$@" ;;
-        arch)    sudo pacman -S --noconfirm "$@" ;;
-        unknown) err "Cannot auto-install $*. Please install manually and re-run." ;;
-    esac
-}
-
-pkg_installed() {
-    case $(os) in
-        debian) dpkg -s "$1" &>/dev/null ;;
-        fedora) rpm -q "$1" &>/dev/null ;;
-        arch)   pacman -Qi "$1" &>/dev/null ;;
-        *)      return 1 ;;
-    esac
-}
-
-# ── prerequisites ───────────────────────────────────────────────────────────
-case $(os) in
-    debian) PREREQS=(unzip curl git fontconfig libatomic1) ;;
-    fedora) PREREQS=(unzip curl git fontconfig) ;;
-    arch)   PREREQS=(unzip curl git fontconfig) ;;
-    macos)  PREREQS=() ;;
-esac
-
-if [[ "$(os)" == macos ]]; then
+# ── prerequisites + zsh ─────────────────────────────────────────────────────
+# Only installs what's missing; falls back to conda-forge if there's no sudo.
+if [[ "$OSTYPE" == darwin* ]]; then
     command -v brew &>/dev/null || err "Homebrew is required on macOS. Install from https://brew.sh"
-else
-    MISSING=()
-    for pkg in "${PREREQS[@]}"; do
-        pkg_installed "$pkg" || MISSING+=("$pkg")
-    done
-    if [[ ${#MISSING[@]} -eq 0 ]]; then
-        log "Prerequisites already installed — skipping"
-    else
-        log "Installing prerequisites: ${MISSING[*]}..."
-        case $(os) in
-            debian) sudo apt-get update -qq && sudo apt-get install -y "${MISSING[@]}" ;;
-            fedora) sudo dnf install -y "${MISSING[@]}" ;;
-            arch)   sudo pacman -S --noconfirm "${MISSING[@]}" ;;
-        esac
-    fi
 fi
-
-# ── zsh ───────────────────────────────────────────────────────────────────────
-if command -v zsh &>/dev/null; then
-    log "zsh $(zsh --version | awk '{print $2}') already installed — skipping"
-else
-    log "Installing zsh..."
-    pkg_install zsh
-fi
+bash <(curl -fsSL "$SHARED_RAW/install-prereqs.sh") unzip curl git zsh -- fontconfig libatomic1
+export PATH="$HOME/.local/bin:$PATH"
+log "zsh $(zsh --version | awk '{print $2}') ready"
 
 # ── starship ──────────────────────────────────────────────────────────────────
 if command -v starship &>/dev/null; then
@@ -142,11 +87,13 @@ if [[ "$SHELL" == "$ZSH_BIN" ]]; then
     log "Default shell is already zsh — skipping"
 else
     log "Setting zsh as default shell..."
-    if ! grep -qx "$ZSH_BIN" /etc/shells; then
-        echo "$ZSH_BIN" | sudo tee -a /etc/shells
+    if ! grep -qx "$ZSH_BIN" /etc/shells && ! echo "$ZSH_BIN" | sudo tee -a /etc/shells >/dev/null; then
+        warn "Couldn't add $ZSH_BIN to /etc/shells (no sudo) — run 'exec zsh' to switch manually."
+    elif chsh -s "$ZSH_BIN"; then
+        log "Default shell changed. Log out and back in to apply."
+    else
+        warn "chsh failed — run 'exec zsh' to switch manually."
     fi
-    chsh -s "$ZSH_BIN"
-    log "Default shell changed. Log out and back in to apply."
 fi
 
 # ── miniconda ─────────────────────────────────────────────────────────────────

@@ -3,6 +3,6 @@
 set -e
 
 echo "Installing prerequisites..."
-sudo apt update
-sudo apt install -y unzip curl git fontconfig libatomic1
-echo "✅ Prerequisites installed"
+# Only installs what's missing; falls back to conda-forge if there's no sudo.
+bash <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/install-prereqs.sh") \
+    unzip curl git -- fontconfig libatomic1
