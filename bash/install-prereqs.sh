@@ -23,6 +23,7 @@ case "$(uname -s)" in
             echo "  chsh -s \$(brew --prefix)/bin/bash"
         fi
         brew install git python3 bash-completion@2 gawk make
+        echo "✅ Prerequisites installed"
         ;;
     MINGW*|MSYS*|CYGWIN*)
         echo "Windows detected."
@@ -35,5 +36,3 @@ case "$(uname -s)" in
         exit 1
         ;;
 esac
-
-echo "✅ Prerequisites installed"
