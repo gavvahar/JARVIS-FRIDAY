@@ -36,6 +36,16 @@ bash <(curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/
 bash <(curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/zsh/install.sh)
 ```
 
+### No sudo? (work laptops)
+
+The bash, fish and zsh installers only install prerequisites that are missing. If any are missing and sudo isn't available (or you skip the password prompt by pressing Enter), they're installed from conda-forge into `~/miniconda3/envs/jarvis-tools` and symlinked into `~/.local/bin` instead. To skip the sudo prompt entirely, run the installer with `JARVIS_NO_SUDO=1`:
+
+```bash
+JARVIS_NO_SUDO=1 bash <(curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/bash/setup.sh)
+```
+
+If `chsh` or `/etc/shells` can't be changed, the installer prints a warning instead of failing — run `exec zsh` / `exec fish` to switch.
+
 ### Termux (Android)
 
 Install [Termux from F-Droid](https://f-droid.org/packages/com.termux/) (not the Play Store — that version is outdated), then run:

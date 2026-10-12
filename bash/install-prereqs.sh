@@ -5,18 +5,9 @@ set -e
 case "$(uname -s)" in
     Linux*)
         echo "Installing prerequisites (Linux)..."
-        if command -v apt &>/dev/null; then
-            sudo apt update
-
-            sudo apt install -y unzip curl git python3 fontconfig libatomic1 bash-completion gawk make
-        elif command -v dnf &>/dev/null; then
-            sudo dnf install -y unzip curl git python3 fontconfig bash-completion gawk make
-        elif command -v pacman &>/dev/null; then
-            sudo pacman -Sy --noconfirm unzip curl git python fontconfig bash-completion gawk make
-        else
-            echo "Unsupported package manager. Install manually: curl git python3"
-            exit 1
-        fi
+        # Only installs what's missing; falls back to conda-forge if there's no sudo.
+        bash <(curl -fsSL "https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/shared/install-prereqs.sh") \
+            unzip curl git python3 gawk make -- fontconfig libatomic1 bash-completion
         ;;
     Darwin*)
         echo "Installing prerequisites (macOS)..."
