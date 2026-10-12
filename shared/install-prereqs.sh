@@ -64,7 +64,8 @@ can_sudo() {
     sudo -n true 2>/dev/null && { SUDO="sudo"; return 0; }
     echo "sudo is needed to install: $*"
     echo "(no sudo rights? press Enter 3 times to install without root instead)"
-    sudo -v -p "[sudo] password for $USER: " 2>/dev/null && { SUDO="sudo"; return 0; }
+    # no custom -p: sudo-rs (Ubuntu 25.10+) wraps it in its own prompt
+    sudo -v 2>/dev/null && { SUDO="sudo"; return 0; }
     return 1
 }
 
