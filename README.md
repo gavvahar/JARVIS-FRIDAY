@@ -38,10 +38,10 @@ bash <(curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/
 
 ### No sudo? (work laptops)
 
-The bash, fish and zsh installers only install prerequisites that are missing. If any are missing and sudo isn't available (or you skip the password prompt by pressing Enter), they're installed from conda-forge into `~/miniconda3/envs/jarvis-tools` and symlinked into `~/.local/bin` instead. To skip the sudo prompt entirely, run the installer with `JARVIS_NO_SUDO=1`:
+The bash, fish and zsh installers only install prerequisites that are missing. If any are missing and sudo isn't available (or you skip the password prompt by pressing Enter), they're installed from conda-forge into `~/miniconda3/envs/jarvis-tools` and symlinked into `~/.local/bin` instead. To skip the sudo prompt entirely, set `JARVIS_NO_SUDO=1` first, then run the install command for your shell from above:
 
 ```bash
-JARVIS_NO_SUDO=1 bash <(curl -fsSL https://raw.githubusercontent.com/gavvahar/JARVIS-FRIDAY/main/bash/setup.sh)
+export JARVIS_NO_SUDO=1
 ```
 
 If `chsh` or `/etc/shells` can't be changed, the installer prints a warning instead of failing — run `exec zsh` / `exec fish` to switch.
