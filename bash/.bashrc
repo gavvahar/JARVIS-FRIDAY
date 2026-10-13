@@ -216,8 +216,22 @@ if [[ ${BLE_VERSION-} ]]; then
 else
     [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 fi
+export FZF_DEFAULT_OPTS='--height=40% --layout=reverse --border'
+export FZF_CTRL_R_OPTS='--sort --exact'
 
 # ── History prefix search (case-insensitive, cycles with Up/Down) ─────────────
+# ble.sh: use its built-in prefix search; on an empty line Up/Down just walk
+# history. Enter runs the match straight away instead of only leaving search.
+if [[ ${BLE_VERSION-} ]]; then
+    _jarvis_ble_hist_keys() {
+        ble-bind -m emacs -f up   'history-search-backward hide-status:ignore-case:empty=history-move'
+        ble-bind -m emacs -f down 'history-search-forward hide-status:ignore-case:empty=history-move'
+    }
+    blehook/eval-after-load keymap_emacs _jarvis_ble_hist_keys
+    ble-bind -m nsearch -f C-m nsearch/accept-line
+    ble-bind -m nsearch -f RET nsearch/accept-line
+fi
+
 # Used when ble.sh is unavailable (e.g. Git Bash on Windows).
 if [[ -z "${BLE_VERSION-}" ]]; then
     _hist_pos=0
