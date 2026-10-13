@@ -1,12 +1,23 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 continuation_prompt = "[.](bright-black) "
-format = "$fill[── @@TITLE@@ ──](@@PRIMARY@@)$fill\n$all"
+format = "$fill[── @@TITLE@@ · ](@@PRIMARY@@)$shell[ ──](@@PRIMARY@@)$fill\n$all"
 right_format = "$time   $battery"
 
 [fill]
 symbol = "─"
 style = "@@PRIMARY@@"
+
+[shell]
+disabled = false
+format = "[$indicator]($style)"
+style = "@@PRIMARY@@"
+bash_indicator = "bash"
+fish_indicator = "fish"
+zsh_indicator = "zsh"
+powershell_indicator = "pwsh"
+pwsh_indicator = "pwsh"
+unknown_indicator = "shell"
 
 [character]
 success_symbol = "[❯](@@PRIMARY@@)"
